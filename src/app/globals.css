@@ -1,0 +1,286 @@
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700&family=Noto+Serif+KR:wght@400;700&family=Gowun+Batang:wght@400;700&display=swap');
+
+/* === 디자인 토큰: 다크모드(기본) === */
+:root {
+  /* Primary Background */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-card: #334155;
+  --bg-modal: rgba(15, 23, 42, 0.95);
+
+  /* Text Colors */
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-inverse: #0f172a;
+
+  /* Border & Dividers */
+  --border-primary: #475569;
+  --border-secondary: #64748b;
+  --border-focus: #3b82f6;
+
+  /* Accent Colors */
+  --accent-primary: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-light: rgba(59, 130, 246, 0.1);
+
+  /* Semantic Colors */
+  --success: #10b981;
+  --success-light: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b;
+  --warning-light: rgba(245, 158, 11, 0.1);
+  --error: #ef4444;
+  --error-light: rgba(239, 68, 68, 0.1);
+  --info: #06b6d4;
+  --info-light: rgba(6, 182, 212, 0.1);
+
+  /* Highlight System */
+  --highlight-personal: rgba(59, 130, 246, 0.2);
+  --highlight-community: rgba(34, 197, 94, 0.2);
+  --highlight-study: rgba(168, 85, 247, 0.2);
+  --highlight-meditation: rgba(234, 179, 8, 0.2);
+
+  /* Interactive States */
+  --hover-overlay: rgba(148, 163, 184, 0.1);
+  --active-overlay: rgba(148, 163, 184, 0.2);
+  --focus-ring: rgba(59, 130, 246, 0.3);
+}
+
+/* === 라이트모드 === */
+.light-mode {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #f1f5f9;
+  --bg-modal: rgba(255, 255, 255, 0.95);
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+
+  --border-primary: #e2e8f0;
+  --border-secondary: #cbd5e1;
+  --border-focus: #3b82f6;
+
+  --hover-overlay: rgba(15, 23, 42, 0.05);
+  --active-overlay: rgba(15, 23, 42, 0.1);
+  --focus-ring: rgba(59, 130, 246, 0.3);
+}
+
+/* === 성경 테마 === */
+.old-testament-theme {
+  --theme-primary: #7c3aed;
+  --theme-secondary: #a855f7;
+  --theme-light: rgba(124, 58, 237, 0.1);
+}
+.new-testament-theme {
+  --theme-primary: #059669;
+  --theme-secondary: #10b981;
+  --theme-light: rgba(5, 150, 105, 0.1);
+}
+.meditation-theme {
+  --theme-primary: #dc2626;
+  --theme-secondary: #ef4444;
+  --theme-light: rgba(220, 38, 38, 0.1);
+}
+
+/* === WCAG AA 대비: 하이콘트라스트 모드 === */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: #ffffff;
+    --bg-primary: #000000;
+    --border-primary: #ffffff;
+    --accent-primary: #ffffff;
+  }
+}
+
+/* === 다크/라이트 모드 자동 적용 === */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-card: #f1f5f9;
+    --bg-modal: rgba(255, 255, 255, 0.95);
+
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    --text-inverse: #ffffff;
+
+    --border-primary: #e2e8f0;
+    --border-secondary: #cbd5e1;
+    --border-focus: #3b82f6;
+
+    --hover-overlay: rgba(15, 23, 42, 0.05);
+    --active-overlay: rgba(15, 23, 42, 0.1);
+    --focus-ring: rgba(59, 130, 246, 0.3);
+  }
+}
+
+/* === 폰트 패밀리 === */
+:root {
+  --font-main:
+    'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Noto Sans KR',
+    sans-serif;
+  --font-bible: 'Noto Serif KR', 'Gowun Batang', 'Times New Roman', 'Georgia', serif;
+  --font-mono: 'Fira Code', 'JetBrains Mono', 'Monaco', 'Consolas', monospace;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+}
+
+/* 본문 전용(성경) */
+.bible-font {
+  font-family: var(--font-bible);
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1;
+}
+
+/* === 타이포그래피 계층 === */
+.text-h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.text-h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+.text-h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.text-h4 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.text-h5 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.text-h6 {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.text-body-lg {
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+.text-body {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.text-body-sm {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.text-bible-lg {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  font-weight: 400;
+}
+.text-bible {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  font-weight: 400;
+}
+.text-bible-sm {
+  font-size: 1rem;
+  line-height: 1.7;
+  font-weight: 400;
+}
+.text-caption {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+.text-overline {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* === 반응형 타이포그래피 === */
+@media (max-width: 768px) {
+  .text-h1 {
+    font-size: 1.75rem;
+  }
+  .text-h2 {
+    font-size: 1.5rem;
+  }
+  .text-h3 {
+    font-size: 1.25rem;
+  }
+  .text-bible-lg {
+    font-size: 1.125rem;
+  }
+  .text-bible {
+    font-size: 1rem;
+  }
+}
+@media (min-width: 1200px) {
+  .text-h1 {
+    font-size: 2.25rem;
+  }
+  .text-h2 {
+    font-size: 2rem;
+  }
+  .text-bible-lg {
+    font-size: 1.375rem;
+  }
+}
+
+/* ===== Firework Effect ===== */
+.firework-particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.8;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transition: opacity 0.3s;
+  animation: firework-explode 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  z-index: 10;
+}
+.firework-particle.red {
+  background: #ff3b3b;
+}
+.firework-particle.yellow {
+  background: #ffe066;
+}
+.firework-particle.blue {
+  background: #5bc0eb;
+}
+.firework-particle.green {
+  background: #53e69d;
+}
+@keyframes firework-explode {
+  0% {
+    transform: scale(0.5) translateY(0);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.2) translateY(-40px);
+    opacity: 0;
+  }
+}

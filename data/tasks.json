@@ -1,0 +1,276 @@
+{
+  "tasks": [
+    {
+      "id": "4e6a0bc1-ba3f-43b0-be7d-51ec4d2dde45",
+      "name": "Next.js 14+ 프로젝트 초기화 및 기본 구조 세팅",
+      "description": "Next.js 14+ 프로젝트 생성, TypeScript, Tailwind CSS, 폴더 구조, 글로벌 스타일, 환경별 설정 파일(.env) 등 초기 개발 환경 구축.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/",
+          "type": "TO_MODIFY",
+          "description": "앱 루트 구조 및 글로벌 스타일"
+        }
+      ],
+      "implementationGuide": "npx create-next-app, tsconfig, tailwind.config, app 디렉토리 구조화, 환경변수 분리, 기본 레이아웃/글로벌 CSS 작성.",
+      "verificationCriteria": "프로젝트 빌드 및 dev 서버 정상 기동, 기본 페이지 렌더링 확인, 환경별 변수 적용 검증.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "76689ad0-24f1-4fb6-b32f-7817f24aeeb9",
+      "name": "Supabase 프로젝트 생성 및 연결",
+      "description": "Supabase 콘솔에서 프로젝트 생성, 연결 정보 확보, @supabase/supabase-js 연동, 환경변수 적용.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "4e6a0bc1-ba3f-43b0-be7d-51ec4d2dde45"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": ".env.local",
+          "type": "TO_MODIFY",
+          "description": "Supabase 연결 정보"
+        }
+      ],
+      "implementationGuide": "Supabase 콘솔에서 프로젝트 생성, API URL/Key 발급, .env.local에 적용, 클라이언트 연동 테스트.",
+      "verificationCriteria": "Supabase 연결 및 쿼리 테스트, 환경변수 적용 확인.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "2fd590dc-74c7-4cad-b767-4c7732c46a72",
+      "name": "7개 핵심 테이블 및 시드 데이터 생성",
+      "description": "b_categories, b_bible_books, b_bible_contents, b_uploaded_files, b_reading_progress, b_tags, b_bible_content_tags 테이블 및 시드 데이터 생성.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "76689ad0-24f1-4fb6-b32f-7817f24aeeb9"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": "docs/00-bible-management-PRD/00-전체아키텍쳐-PRD.md",
+          "type": "REFERENCE",
+          "description": "테이블/정책/시드 SQL"
+        }
+      ],
+      "implementationGuide": "Supabase SQL Editor에서 테이블 생성, 시드 데이터 삽입, 외래키/인덱스/정책 적용.",
+      "verificationCriteria": "모든 테이블 정상 생성, 시드 데이터 삽입 및 쿼리 결과 확인.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "32db6ae8-8f02-4d64-91e9-df672fc3bcf1",
+      "name": "RLS(행 수준 보안) 및 정책 적용",
+      "description": "운영/개발 환경별 RLS 정책, 공개/관리자/사용자별 접근 정책, Storage 버킷 정책 적용.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "2fd590dc-74c7-4cad-b767-4c7732c46a72"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": "docs/00-bible-management-PRD/00-전체아키텍쳐-PRD.md",
+          "type": "REFERENCE",
+          "description": "RLS/Storage 정책 SQL"
+        }
+      ],
+      "implementationGuide": "Supabase 정책 SQL 작성 및 적용, 정책별 테스트, Storage 버킷 생성 및 정책 적용.",
+      "verificationCriteria": "정책별 접근 테스트, 비인가 접근 차단, 관리자/사용자별 권한 분리 검증.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "6b1fbab2-3bb3-485b-ba3a-f85a7e91ac31",
+      "name": "코드 품질 도구(ESLint, Prettier, Husky, lint-staged) 설정",
+      "description": "코드 품질 및 포맷팅 자동화, Git Hooks, 스테이징 린트 등 개발 생산성 도구 세팅.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "4e6a0bc1-ba3f-43b0-be7d-51ec4d2dde45"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": ".eslintrc, .prettierrc, package.json",
+          "type": "TO_MODIFY",
+          "description": "품질 도구 설정"
+        }
+      ],
+      "implementationGuide": "eslint, prettier, husky, lint-staged 설치 및 설정, pre-commit hook 적용.",
+      "verificationCriteria": "lint, format, pre-commit hook 정상 동작, 코드 일관성 유지.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "b7dbb5f9-dcf9-4392-bd7f-50fe73516add",
+      "name": "CI/CD 파이프라인(GitHub Actions, Vercel) 구축",
+      "description": "GitHub Actions 기반 테스트/빌드/배포 자동화, Vercel 연동, 환경별 배포 분리.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "6b1fbab2-3bb3-485b-ba3a-f85a7e91ac31"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": ".github/workflows/deploy.yml",
+          "type": "CREATE",
+          "description": "CI/CD 파이프라인"
+        }
+      ],
+      "implementationGuide": ".github/workflows/deploy.yml 작성, Vercel 프로젝트 연동, 환경별 배포 테스트.",
+      "verificationCriteria": "PR/Push 시 자동 빌드·배포, 배포 이력 확인, 실패 시 알림 동작.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "ed545748-75a3-4dd3-9877-06b94b665461",
+      "name": "프론트엔드 주요 기능 개발 (성경읽기, 자료실, 데이터관리, HOME)",
+      "description": "성경읽기 엔진, 자료실 CRUD, 데이터관리 대시보드, HOME(분석) 등 주요 화면 및 기능 개발.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "2fd590dc-74c7-4cad-b767-4c7732c46a72"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/",
+          "type": "TO_MODIFY",
+          "description": "주요 페이지/컴포넌트"
+        }
+      ],
+      "implementationGuide": "각 기능별 컴포넌트/페이지 설계, 상태관리(zustand), 폼(react-hook-form), TTS, 차트 등 연동.",
+      "verificationCriteria": "주요 기능별 화면 렌더링, CRUD/진도/통계 등 정상 동작.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "79548242-0649-4840-9737-5e272faaab15",
+      "name": "API/Edge Function 구현 및 연동",
+      "description": "Next.js API Route, Supabase Edge Function 등 API/서버리스 함수 구현 및 프론트 연동.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "ed545748-75a3-4dd3-9877-06b94b665461"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/api/",
+          "type": "CREATE",
+          "description": "API Route/Edge Function"
+        }
+      ],
+      "implementationGuide": "/api/bible, /api/content, /api/progress, /api/admin 등 API Route/Edge Function 작성, 클라이언트 연동.",
+      "verificationCriteria": "API/Edge Function 정상 동작, 프론트와 연동 테스트.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "5550a485-0fa9-4988-9b94-5d3934a6a472",
+      "name": "성능 최적화(코드 스플리팅, 이미지, 쿼리, 캐싱)",
+      "description": "코드 스플리팅, 이미지 최적화, DB 쿼리/인덱스/캐싱, API 응답 속도 개선 등 성능 튜닝.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "79548242-0649-4840-9737-5e272faaab15"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/",
+          "type": "TO_MODIFY",
+          "description": "성능 최적화 적용"
+        }
+      ],
+      "implementationGuide": "React.lazy, next/image, DB 인덱스/함수/뷰, API 응답 최적화, 캐싱 전략 적용.",
+      "verificationCriteria": "LCP/FID/CLS, API/쿼리 응답, 페이지 로드/전환 속도 기준 충족.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "2ad5170f-01f6-42ef-840c-f9404ded00f5",
+      "name": "모니터링 및 에러 추적 시스템 구축",
+      "description": "Vercel Analytics, 에러 추적, 성능 메트릭, 사용자 행동 분석 등 모니터링 시스템 구축.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "5550a485-0fa9-4988-9b94-5d3934a6a472"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": "vercel.json",
+          "type": "TO_MODIFY",
+          "description": "분석/모니터링 설정"
+        }
+      ],
+      "implementationGuide": "Vercel Analytics 연동, JS 에러/404 추적, 사용자 행동/기능 사용률 분석.",
+      "verificationCriteria": "분석/에러/사용자 데이터 수집, 대시보드 확인.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "6bb62e47-5e16-48fa-a8c8-10aa02d553aa",
+      "name": "백업 및 재해 복구 자동화",
+      "description": "DB/Storage 자동 백업, 커스텀 데이터 덤프, 롤백/복구 스크립트, 다중 환경 분리.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "2ad5170f-01f6-42ef-840c-f9404ded00f5"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": "docs/00-bible-management-PRD/00-전체아키텍쳐-PRD.md",
+          "type": "REFERENCE",
+          "description": "백업/복구 SQL/전략"
+        }
+      ],
+      "implementationGuide": "Supabase 자동 백업, Edge Function, 커스텀 백업/복구 함수, 롤백 전략 문서화.",
+      "verificationCriteria": "일일 백업, 복구 테스트, 롤백 시나리오 검증.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    },
+    {
+      "id": "ef1d69cb-ed86-4e8c-a4fa-9804aba3e194",
+      "name": "문서화 및 README/개발가이드 정비",
+      "description": "프로젝트 구조, 설정, 사용법, 배포, API, DB, 백업 등 주요 문서화 및 README 작성.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "6bb62e47-5e16-48fa-a8c8-10aa02d553aa"
+        }
+      ],
+      "createdAt": "2025-07-10T11:09:01.429Z",
+      "updatedAt": "2025-07-10T11:09:01.429Z",
+      "relatedFiles": [
+        {
+          "path": "README.md",
+          "type": "TO_MODIFY",
+          "description": "프로젝트 최상위 문서"
+        }
+      ],
+      "implementationGuide": "README.md, docs/ 디렉토리 내 상세 문서, API/DB/배포/백업 가이드 작성.",
+      "verificationCriteria": "문서 최신화, 신규 개발자 온보딩 가능 수준의 가이드 제공.",
+      "analysisResult": "PRD의 모든 요구사항을 실전 개발 관점에서 빠짐없이 반영한, 구체적이고 실행 가능한 TO DO 리스트. 각 항목은 선행/후행 관계, 의존성, 검증 기준이 명확하며, 실제 개발자가 바로 실행할 수 있도록 설계됨."
+    }
+  ]
+}
