@@ -50,11 +50,11 @@
 
 6. **CI/CD 파이프라인(GitHub Actions, Vercel) 구축**
 
-- [ ] .github/workflows/deploy.yml 작성
-- [ ] Vercel 프로젝트 연동
-- [ ] 환경별 배포 테스트
-- [ ] PR/Push 시 자동 빌드·배포 확인
-- [ ] 배포 이력 및 실패 시 알림 동작 검증
+- [x] .github/workflows/deploy.yml 작성
+- [x] Vercel 프로젝트 연동
+- [x] 환경별 배포 테스트
+- [x] PR/Push 시 자동 빌드·배포 확인
+- [x] 배포 이력 및 실패 시 알림 동작 검증
 
 7. **프론트엔드 주요 기능 개발 (성경읽기, 자료실, 데이터관리, HOME)**
 
