@@ -1,6 +1,8 @@
 'use client';
 import React from 'react';
 
+import { Controller, Control, FieldValues, RegisterOptions, Path } from 'react-hook-form';
+
 interface InputProps {
   type?: 'text' | 'email' | 'password' | 'number' | 'search';
   placeholder?: string;
@@ -79,5 +81,52 @@ const Input: React.FC<InputProps> = ({
     </div>
   );
 };
+
+interface RHFInputProps<T extends FieldValues> {
+  name: Path<T>;
+  control: Control<T>;
+  rules?: RegisterOptions<T, Path<T>>;
+  label?: string;
+  placeholder?: string;
+  type?: string;
+  className?: string;
+}
+
+/**
+ * RHFInput - react-hook-form Controller 기반 인풋 컴포넌트
+ * - name, control, rules, label, placeholder, type 등 지원
+ * - 기존 Input 컴포넌트와 통합 사용 가능
+ */
+export function RHFInput<T extends FieldValues = FieldValues>({
+  name,
+  control,
+  rules,
+  label,
+  placeholder,
+  type = 'text',
+  className = '',
+}: RHFInputProps<T>) {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      rules={rules}
+      render={({ field, fieldState }) => (
+        <div className={className}>
+          {label && <label className="block mb-1 text-sm font-medium">{label}</label>}
+          <input
+            {...field}
+            type={type}
+            placeholder={placeholder}
+            className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-accent-primary ${fieldState.error ? 'border-error' : 'border-border-primary'}`}
+          />
+          {fieldState.error && (
+            <span className="text-error text-xs mt-1 block">{fieldState.error.message}</span>
+          )}
+        </div>
+      )}
+    />
+  );
+}
 
 export default Input;

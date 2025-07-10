@@ -39,11 +39,16 @@ export default function Header() {
   }, [isLight]);
 
   return (
-    <header className="w-full py-4 border-b border-white/10 bg-[#181c24] flex items-center justify-between dark:bg-[#181c24]">
+    <header
+      className={`w-full py-4 border-b border-white/10 flex items-center justify-between
+        ${isLight ? 'bg-[var(--header-bg)] text-[var(--header-footer-text)]' : 'bg-[#181c24] text-white'}
+      `}
+      style={{ borderRadius: 'var(--header-footer-radius)' }}
+    >
       <div className="flex items-center min-w-0">
         <Link
           href="/"
-          className="font-bold text-xl text-white tracking-tight pl-2 select-none whitespace-nowrap"
+          className={`font-bold text-xl tracking-tight pl-2 select-none whitespace-nowrap ${isLight ? 'text-[var(--header-footer-text)]' : 'text-white'}`}
           aria-label="홈으로 이동"
         >
           Smart Bible Study
@@ -57,7 +62,7 @@ export default function Header() {
               <li key={menu.label}>
                 <Link
                   href={menu.href}
-                  className="text-white/80 hover:text-blue-400 text-base font-medium px-2 py-1 transition-colors duration-150"
+                  className={`text-base font-medium px-2 py-1 transition-colors duration-150 ${isLight ? 'text-[var(--header-footer-text)] hover:text-blue-600' : 'text-white/80 hover:text-blue-400'}`}
                 >
                   <span ref={fireworkRef} onMouseEnter={fire} className="relative inline-block">
                     {menu.label}
