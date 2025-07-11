@@ -152,7 +152,7 @@ export default function LibraryManager() {
   const handleEdit = (resource: BibleResource) => setEditResource(resource);
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 bg-white dark:bg-black rounded-lg shadow-md">
+    <div className="w-full max-w-4xl mx-auto p-4 bg-[var(--bg-card)] text-[var(--text-primary)] dark:bg-black dark:text-white rounded-lg shadow-md">
       {/* 카테고리 토글 */}
       <div className="flex gap-2 mb-4">
         <Button

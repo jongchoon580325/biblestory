@@ -118,18 +118,18 @@ export default function BibleReader({ initialCategory = 'old-testament' }: Bible
   const progress = chapterData && chapterData.verses.length > 0 ? 100 : 0;
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-4 bg-white dark:bg-black rounded-lg shadow-md">
+    <div className="w-full max-w-3xl mx-auto p-4 bg-[var(--bg-card)] text-[var(--text-primary)] dark:bg-black dark:text-white rounded-lg shadow-md">
       {/* 카테고리 토글 */}
       <div className="flex gap-2 mb-4">
         <button
-          className={`px-4 py-2 rounded ${category === 'old-testament' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}
+          className={`px-4 py-2 rounded font-semibold transition-colors duration-150 ${category === 'old-testament' ? 'bg-blue-500 text-white' : 'bg-transparent text-[var(--text-primary)] dark:text-white border border-gray-300 dark:border-gray-600'}`}
           onClick={() => setCategory('old-testament')}
           aria-pressed={category === 'old-testament'}
         >
           구약
         </button>
         <button
-          className={`px-4 py-2 rounded ${category === 'new-testament' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}
+          className={`px-4 py-2 rounded font-semibold transition-colors duration-150 ${category === 'new-testament' ? 'bg-blue-500 text-white' : 'bg-transparent text-[var(--text-primary)] dark:text-white border border-gray-300 dark:border-gray-600'}`}
           onClick={() => setCategory('new-testament')}
           aria-pressed={category === 'new-testament'}
         >
@@ -141,7 +141,7 @@ export default function BibleReader({ initialCategory = 'old-testament' }: Bible
         {books.map((book) => (
           <button
             key={book.id}
-            className={`px-3 py-1 rounded text-sm ${selectedBook?.id === book.id ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800'}`}
+            className={`px-3 py-1 rounded text-sm ${selectedBook?.id === book.id ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-[var(--text-primary)]'}`}
             onClick={() => setSelectedBook(book)}
             aria-pressed={selectedBook?.id === book.id}
           >
@@ -155,7 +155,7 @@ export default function BibleReader({ initialCategory = 'old-testament' }: Bible
           {Array.from({ length: chapterCount }, (_, i) => i + 1).map((num) => (
             <button
               key={num}
-              className={`px-2 py-1 rounded text-xs ${selectedChapter === num ? 'bg-blue-400 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}
+              className={`px-2 py-1 rounded text-xs ${selectedChapter === num ? 'bg-blue-400 text-white' : 'bg-gray-200 dark:bg-gray-700 text-[var(--text-primary)]'}`}
               onClick={() => setSelectedChapter(num)}
               aria-pressed={selectedChapter === num}
             >
@@ -165,7 +165,7 @@ export default function BibleReader({ initialCategory = 'old-testament' }: Bible
         </div>
       )}
       {/* 본문 표시 */}
-      <div className="min-h-[200px] bg-gray-50 dark:bg-gray-900 rounded p-4 mb-4">
+      <div className="min-h-[200px] bg-[var(--bg-secondary)] dark:bg-gray-900 rounded p-4 mb-4 text-[var(--text-primary)]">
         {loading && <div className="text-center text-gray-400">로딩 중...</div>}
         {error && <div className="text-red-500">{error}</div>}
         {chapterData && (

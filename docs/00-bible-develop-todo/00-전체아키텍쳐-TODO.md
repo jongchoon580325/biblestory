@@ -69,12 +69,12 @@
 
 8. **API/Edge Function 구현 및 연동**
 
-- [ ] /api/bible API Route 구현
-- [ ] /api/content API Route 구현
-- [ ] /api/progress API Route 구현
-- [ ] /api/admin API Route 구현
-- [ ] Supabase Edge Function 작성 및 배포
-- [ ] 프론트엔드와 연동 테스트
+- [x] /api/bible API Route 구현
+- [x] /api/content API Route 구현
+- [x] /api/progress API Route 구현
+- [x] /api/admin API Route 구현
+- [x] Supabase Edge Function 작성 및 배포
+- [x] 프론트엔드와 연동 테스트
 
 9. **성능 최적화(코드 스플리팅, 이미지, 쿼리, 캐싱)**
 

@@ -289,3 +289,176 @@ body {
     opacity: 0;
   }
 }
+
+/* === 터치 친화적 인터페이스 및 카드 레이아웃 (모바일) === */
+@media (max-width: 768px) {
+  /* 카드형 UI */
+  .card, .data-export-card, .data-import-card, .category-export-card {
+    border-radius: 16px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.08);
+    background: rgba(36,36,36,0.85);
+    backdrop-filter: blur(8px);
+    margin-bottom: 1rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:active, .data-export-card:active, .data-import-card:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.12);
+  }
+  /* 카드 헤더/액션 수직 정렬 */
+  .card-header, .card-actions {
+    flex-direction: column !important;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  /* 터치 타겟(버튼, 액션) */
+  .tab-btn, .action-btn, .accordion-trigger, .book-item, .category-actions button, .book-actions button {
+    min-height: 44px;
+    min-width: 44px;
+    border-radius: 8px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .tab-btn:active, .action-btn:active {
+    background: rgba(0,212,255,0.08);
+    transform: scale(0.97);
+  }
+  /* 어코디언 스크롤/최대높이 */
+  .categories-accordion {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  /* 드롭존, 프로그레스바 */
+  .dropzone {
+    min-height: 120px;
+    padding: 1rem;
+    border-radius: 12px;
+    background: rgba(36,36,36,0.7);
+    border: 2px dashed #00d4ff;
+    color: #e0e0e0;
+    text-align: center;
+  }
+  .progress-bar {
+    height: 8px;
+    border-radius: 4px;
+  }
+  /* 모달 컨텐츠 */
+  .modal-content {
+    margin: 1rem !important;
+    max-width: 98vw !important;
+    max-height: calc(100vh - 2rem) !important;
+    border-radius: 18px !important;
+    background: rgba(36,36,36,0.92) !important;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18);
+    padding: 1rem !important;
+    font-size: 1rem;
+  }
+  /* 폼 그룹 */
+  .form-group {
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+  }
+  /* 버튼(공통) */
+  .button, .btn, .tab-btn, .action-btn, button {
+    min-height: 44px;
+    min-width: 44px;
+    font-size: 1rem;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .button:active, .btn:active, .tab-btn:active, .action-btn:active, button:active {
+    background: rgba(0,212,255,0.08);
+    transform: scale(0.97);
+  }
+  /* 입력 필드 */
+  input, select, textarea {
+    font-size: 1rem;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+  }
+  /* 라벨 */
+  label {
+    font-size: 0.98rem;
+    margin-bottom: 0.25rem;
+  }
+  /* 반응형 폰트 */
+  h1, .text-2xl { font-size: 1.5rem; }
+  h2, .text-xl { font-size: 1.25rem; }
+  h3, .text-lg { font-size: 1.1rem; }
+  .text-sm { font-size: 0.98rem; }
+}
+
+/* === 접근성 개선: 포커스, 색상 대비, 터치 타겟, 폰트, 스크린리더 === */
+:root {
+  --focus-outline: 2px solid #00d4ff;
+  --focus-radius: 6px;
+  --focus-offset: 2px;
+}
+
+.focus-visible, button:focus-visible, .tab-btn:focus-visible, .action-btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--focus-radius);
+  box-shadow: 0 0 0 2px #00d4ff33;
+}
+
+/* WCAG AA 대비: 텍스트/배경 */
+body, .text-primary {
+  color: #e0e0e0;
+  background: #181a1b;
+}
+.card, .modal-content, .data-export-card, .data-import-card {
+  background: rgba(36,36,36,0.92);
+  color: #f5f5f5;
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: #ffffff;
+    --bg-primary: #000000;
+    --border-primary: #ffffff;
+    --accent-primary: #ffffff;
+  }
+  body {
+    background: #000 !important;
+    color: #fff !important;
+  }
+}
+
+/* 모션 감소 모드 지원 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 스크린리더 전용 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 반응형 폰트(모바일) */
+@media (max-width: 768px) {
+  html { font-size: 16px; }
+  body, .text-bible { font-size: 1.08rem; }
+  h1, .text-2xl { font-size: 1.5rem; }
+  h2, .text-xl { font-size: 1.25rem; }
+  h3, .text-lg { font-size: 1.1rem; }
+  .text-sm { font-size: 0.98rem; }
+}
