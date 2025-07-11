@@ -7,6 +7,8 @@ import Icon from './ui/icon';
 import CategoryManager from './category-manager';
 import Modal from './ui/modal';
 import useMediaQuery from './useMediaQuery';
+import JSZip from 'jszip';
+import { supabase } from '../app/supabaseClient';
 
 /**
  * DataDashboard - 데이터관리 대시보드 컴포넌트
@@ -61,26 +63,47 @@ const DataDashboard: React.FC = () => {
         contentTypes: ['본문', '이미지', '첨부파일'],
       },
     };
-    // 더미 ZIP 다운로드
+    // ZIP 다운로드(실데이터)
     const handleDataExport = async () => {
       setIsExporting(true);
       setExportProgress(0);
-      setTimeout(() => setExportProgress(40), 400);
-      setTimeout(() => setExportProgress(80), 800);
-      setTimeout(() => {
+      try {
+        setExportProgress(10);
+        // Supabase에서 전체 데이터 fetch
+        const { data: categories } = await supabase.from('b_categories').select('*');
+        setExportProgress(30);
+        const { data: books } = await supabase.from('b_bible_books').select('*');
+        setExportProgress(50);
+        const { data: contents } = await supabase.from('b_bible_contents').select('*');
+        setExportProgress(70);
+        // JSON으로 묶기
+        const exportData = {
+          categories: categories || [],
+          books: books || [],
+          contents: contents || [],
+          exportedAt: new Date().toISOString(),
+        };
+        // JSZip으로 압축
+        const zip = new JSZip();
+        zip.file('bible-data.json', JSON.stringify(exportData, null, 2));
+        const blob = await zip.generateAsync({ type: 'blob' });
         setExportProgress(100);
-        // 더미 ZIP 파일 다운로드
-        const blob = new Blob(['DUMMY ZIP DATA'], { type: 'application/zip' });
+        // 파일명: yyyy-mm-dd-성경데이터-내보내기.zip
+        const today = new Date().toISOString().slice(0,10);
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `bible-data-export-dummy.zip`;
+        a.download = `${today}-성경데이터-내보내기.zip`;
         a.click();
         URL.revokeObjectURL(url);
         setIsExporting(false);
         setExportProgress(0);
-        alert('데이터 내보내기(더미) 완료!');
-      }, 1200);
+        alert('데이터 내보내기(백업) 완료!');
+      } catch (e) {
+        setIsExporting(false);
+        setExportProgress(0);
+        alert('내보내기 오류: ' + (e instanceof Error ? e.message : '알 수 없는 오류'));
+      }
     };
     return (
       <Card className="data-export-card">
@@ -171,21 +194,49 @@ const DataDashboard: React.FC = () => {
       setUploadedFile(file);
       setShowPreview(true);
     };
-    // 데이터 가져오기(복원) 실행(더미)
+    // 데이터 가져오기(복원) 실행(실데이터)
     const handleDataImport = async () => {
       if (!uploadedFile) return;
       setIsImporting(true);
       setImportProgress(0);
-      setTimeout(() => setImportProgress(40), 400);
-      setTimeout(() => setImportProgress(80), 800);
-      setTimeout(() => {
+      try {
+        setImportProgress(10);
+        // ZIP 파일에서 bible-data.json 추출
+        const zip = await JSZip.loadAsync(uploadedFile);
+        setImportProgress(30);
+        const jsonFile = zip.file('bible-data.json');
+        if (!jsonFile) throw new Error('bible-data.json 파일이 없습니다.');
+        const jsonText = await jsonFile.async('string');
+        setImportProgress(50);
+        const data = JSON.parse(jsonText);
+        // 옵션: 기존 데이터 삭제(덮어쓰기)
+        if (importOptions.overwriteExisting) {
+          await supabase.from('b_bible_contents').delete().neq('id', '');
+          await supabase.from('b_bible_books').delete().neq('id', '');
+          await supabase.from('b_categories').delete().neq('id', '');
+        }
+        setImportProgress(70);
+        // 카테고리/책/자료 일괄 upsert
+        if (data.categories?.length) {
+          await supabase.from('b_categories').upsert(data.categories);
+        }
+        if (data.books?.length) {
+          await supabase.from('b_bible_books').upsert(data.books);
+        }
+        if (data.contents?.length) {
+          await supabase.from('b_bible_contents').upsert(data.contents);
+        }
         setImportProgress(100);
         setIsImporting(false);
         setImportProgress(0);
         setUploadedFile(null);
         setShowPreview(false);
-        alert('데이터 가져오기(더미) 완료!');
-      }, 1200);
+        alert('데이터 가져오기(복원) 완료!');
+      } catch (e) {
+        setIsImporting(false);
+        setImportProgress(0);
+        alert('가져오기 오류: ' + (e instanceof Error ? e.message : '알 수 없는 오류'));
+      }
     };
     return (
       <Card className="data-import-card mt-4">
@@ -275,7 +326,7 @@ const DataDashboard: React.FC = () => {
     );
   }
 
-  // 데이터 초기화/백업 카드
+  // 데이터 초기화/카테고리 초기화(실데이터)
   function DataResetCard() {
     const [showResetDialog, setShowResetDialog] = useState<'data' | 'categories' | null>(null);
     const [isResetting, setIsResetting] = useState(false);
@@ -283,12 +334,55 @@ const DataDashboard: React.FC = () => {
     const handleReset = async (type: 'data' | 'categories') => {
       setIsResetting(true);
       setShowResetDialog(null);
-      // 1. 자동 백업(더미)
-      await new Promise(res => setTimeout(res, 600));
-      // 2. 실제 초기화(더미)
-      await new Promise(res => setTimeout(res, 900));
-      setIsResetting(false);
-      alert(type === 'data' ? '데이터 초기화(더미) 완료!' : '카테고리 초기화(더미) 완료!');
+      try {
+        // 1. 자동 백업(내보내기와 동일)
+        const { data: categories } = await supabase.from('b_categories').select('*');
+        const { data: books } = await supabase.from('b_bible_books').select('*');
+        const { data: contents } = await supabase.from('b_bible_contents').select('*');
+        const exportData = {
+          categories: categories || [],
+          books: books || [],
+          contents: contents || [],
+          exportedAt: new Date().toISOString(),
+        };
+        const zip = new JSZip();
+        zip.file('bible-data.json', JSON.stringify(exportData, null, 2));
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `bible-data-backup-before-reset-${new Date().toISOString().slice(0,10)}.zip`;
+        a.click();
+        URL.revokeObjectURL(url);
+        // 2. 실제 초기화
+        if (type === 'data') {
+          // 자료/진도/파일만 삭제, 카테고리/책 보존
+          await supabase.from('b_bible_contents').delete().neq('id', '');
+        } else if (type === 'categories') {
+          // 카테고리/책/자료 전체 삭제
+          await supabase.from('b_bible_contents').delete().neq('id', '');
+          await supabase.from('b_bible_books').delete().neq('id', '');
+          await supabase.from('b_categories').delete().neq('id', '');
+          // 기본 카테고리/책 복원(샘플)
+          const defaultCategories = [
+            { id: 'old-testament', name: 'old-testament', display_name: '구약', color_theme: 'old-testament', sort_order: 1 },
+            { id: 'new-testament', name: 'new-testament', display_name: '신약', color_theme: 'new-testament', sort_order: 2 },
+          ];
+          const defaultBooks = [
+            { id: 'genesis', category_id: 'old-testament', name: '창세기', name_english: 'Genesis', abbreviation: '창', total_chapters: 50, sort_order: 1 },
+            { id: 'exodus', category_id: 'old-testament', name: '출애굽기', name_english: 'Exodus', abbreviation: '출', total_chapters: 40, sort_order: 2 },
+            { id: 'matthew', category_id: 'new-testament', name: '마태복음', name_english: 'Matthew', abbreviation: '마', total_chapters: 28, sort_order: 1 },
+            { id: 'mark', category_id: 'new-testament', name: '마가복음', name_english: 'Mark', abbreviation: '막', total_chapters: 16, sort_order: 2 },
+          ];
+          await supabase.from('b_categories').upsert(defaultCategories);
+          await supabase.from('b_bible_books').upsert(defaultBooks);
+        }
+        setIsResetting(false);
+        alert(type === 'data' ? '데이터 초기화(실데이터) 완료!' : '카테고리 초기화(실데이터) 및 기본값 복원 완료!');
+      } catch (e) {
+        setIsResetting(false);
+        alert('초기화 오류: ' + (e instanceof Error ? e.message : '알 수 없는 오류'));
+      }
     };
     return (
       <Card className="mb-2 mt-4">

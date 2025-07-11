@@ -6,6 +6,9 @@ import Icon from './ui/icon';
 import Modal from './ui/modal';
 import Input from './ui/input';
 // import { Form } from './ui/form';
+import { supabase } from '../app/supabaseClient';
+import { useEffect } from 'react';
+import Toast from './ui/toast';
 
 // 임시 타입(후속 단계에서 실제 데이터 연동)
 interface BibleBook {
@@ -24,32 +27,6 @@ interface BibleCategory {
   sortOrder: number;
   books: BibleBook[];
 }
-
-// 더미 데이터(후속 단계에서 Supabase 연동)
-const dummyCategories: BibleCategory[] = [
-  {
-    id: 'old-testament',
-    name: 'old-testament',
-    displayName: '구약 성경',
-    colorTheme: 'old-testament',
-    sortOrder: 1,
-    books: [
-      { id: 'genesis', name: '창세기', abbreviation: '창', sortOrder: 1, totalChapters: 50 },
-      { id: 'exodus', name: '출애굽기', abbreviation: '출', sortOrder: 2, totalChapters: 40 },
-    ],
-  },
-  {
-    id: 'new-testament',
-    name: 'new-testament',
-    displayName: '신약 성경',
-    colorTheme: 'new-testament',
-    sortOrder: 2,
-    books: [
-      { id: 'matthew', name: '마태복음', abbreviation: '마', sortOrder: 1, totalChapters: 28 },
-      { id: 'mark', name: '마가복음', abbreviation: '막', sortOrder: 2, totalChapters: 16 },
-    ],
-  },
-];
 
 // CSV 변환용 유틸 (간단 버전)
 function toCSV(categories: BibleCategory[]): string {
@@ -84,8 +61,17 @@ function parseCSV(text: string): Record<string, string>[] {
   });
 }
 
+// Book 폼 타입 정의
+interface BibleBookForm {
+  name: string;
+  nameEnglish: string;
+  abbreviation: string;
+  totalChapters: number;
+  sortOrder: number;
+}
+
 const CategoryManager: React.FC = () => {
-  const [categories, setCategories] = useState<BibleCategory[]>(dummyCategories);
+  const [categories, setCategories] = useState<BibleCategory[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
   // 다이얼로그 상태
   const [showDialog, setShowDialog] = useState<null | { type: 'category' | 'book'; mode: 'create' | 'edit'; categoryId?: string; item?: BibleCategory | BibleBook }>(null);
@@ -94,11 +80,52 @@ const CategoryManager: React.FC = () => {
   // CSV 업로드 상태
   const [csvPreview, setCsvPreview] = useState<Record<string, string>[] | null>(null);
   const [csvFileName, setCsvFileName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
+  // Supabase에서 카테고리+책 목록 fetch
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: cats, error: catErr } = await supabase
+        .from('b_categories')
+        .select('*')
+        .order('sort_order', { ascending: true });
+      if (catErr) return;
+      const { data: books, error: bookErr } = await supabase
+        .from('b_bible_books')
+        .select('*')
+        .order('sort_order', { ascending: true });
+      if (bookErr) return;
+      // 카테고리별 책 매핑
+      const catList = (cats || []).map(cat => ({
+        ...cat,
+        books: (books || []).filter(b => b.category_id === cat.id),
+      }));
+      setCategories(catList);
+    };
+    fetchData();
+  }, []);
+
+  // 책 추가/수정/삭제도 동일하게 supabase 쿼리로 구현
   // CSV 내보내기
-  const handleExportCSV = () => {
-    const csv = toCSV(categories);
-    downloadCSV(csv, `bible-categories-${new Date().toISOString().slice(0,10)}.csv`);
+  const handleExportCSV = async () => {
+    setLoading(true);
+    try {
+      // Supabase에서 실데이터 fetch
+      const { data: cats } = await supabase.from('b_categories').select('*').order('sort_order');
+      const { data: books } = await supabase.from('b_bible_books').select('*');
+      const catList = (cats || []).map(cat => ({
+        ...cat,
+        books: (books || []).filter(b => b.category_id === cat.id),
+      }));
+      const csv = toCSV(catList);
+      const today = new Date().toISOString().slice(0,10);
+      downloadCSV(csv, `${today}-카테고리항목-내보내기.zip`);
+      setToast({ type: 'success', message: 'CSV 내보내기 완료' });
+    } catch (e: unknown) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : 'CSV 내보내기 실패' });
+    }
+    setLoading(false);
   };
   // CSV 업로드
   const handleCSVUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,38 +135,150 @@ const CategoryManager: React.FC = () => {
     const text = await file.text();
     setCsvPreview(parseCSV(text).slice(0, 5)); // 미리보기 5행
   };
-  // CSV 가져오기(더미: 상태 반영)
-  const handleImportCSV = () => {
-    if (!csvPreview) return;
-    // CSV 데이터를 카테고리/책 구조로 변환
-    const cats: BibleCategory[] = [];
-    let lastCat: BibleCategory | null = null;
-    csvPreview.forEach(row => {
-      if (row.type === 'category') {
-        lastCat = {
-          id: row.category_id,
-          name: row.category_name,
-          displayName: row.category_display_name,
-          colorTheme: row.color_theme,
-          sortOrder: Number(row.sort_order) || 0,
-          books: [],
-        };
-        cats.push(lastCat);
-      } else if (row.type === 'book' && lastCat) {
-        lastCat.books.push({
-          id: row.book_id,
-          name: row.book_name,
-          nameEnglish: row.book_english,
-          abbreviation: row.book_abbreviation,
-          totalChapters: Number(row.total_chapters) || 1,
-          sortOrder: Number(row.book_sort_order) || 0,
-        });
-      }
-    });
-    setCategories(cats);
-    setCsvPreview(null);
-    setCsvFileName('');
-    alert('CSV 데이터 가져오기(상태 반영) 완료');
+  // CSV 가져오기
+  const handleImportCSV = async () => {
+    setLoading(true);
+    try {
+      if (!csvPreview) return;
+      // CSV 데이터를 카테고리/책 구조로 변환
+      const cats: BibleCategory[] = [];
+      let lastCat: BibleCategory | null = null;
+      csvPreview.forEach(row => {
+        if (row.type === 'category') {
+          lastCat = {
+            id: row.category_id,
+            name: row.category_name,
+            displayName: row.category_display_name,
+            colorTheme: row.color_theme,
+            sortOrder: Number(row.sort_order) || 0,
+            books: [],
+          };
+          cats.push(lastCat);
+        } else if (row.type === 'book' && lastCat) {
+          lastCat.books.push({
+            id: row.book_id,
+            name: row.book_name,
+            nameEnglish: row.book_english,
+            abbreviation: row.book_abbreviation,
+            totalChapters: Number(row.total_chapters) || 1,
+            sortOrder: Number(row.book_sort_order) || 0,
+          });
+        }
+      });
+      // Supabase에 일괄 insert/upsert
+      await supabase.from('b_categories').upsert(
+        cats.map(cat => ({
+          id: cat.id,
+          name: cat.name,
+          display_name: cat.displayName,
+          color_theme: cat.colorTheme,
+          sort_order: cat.sortOrder,
+        }))
+      );
+      const allBooks = cats.flatMap(cat => cat.books.map(book => ({
+        id: book.id,
+        category_id: cat.id,
+        name: book.name,
+        name_english: book.nameEnglish,
+        abbreviation: book.abbreviation,
+        total_chapters: book.totalChapters,
+        sort_order: book.sortOrder,
+      })));
+      await supabase.from('b_bible_books').upsert(allBooks);
+      // 목록 새로고침
+      const { data: cats2 } = await supabase.from('b_categories').select('*').order('sort_order');
+      const { data: books2 } = await supabase.from('b_bible_books').select('*');
+      setCategories((cats2 || []).map(cat => ({ ...cat, books: (books2 || []).filter(b => b.category_id === cat.id) })));
+      setCsvPreview(null);
+      setCsvFileName('');
+      setToast({ type: 'success', message: 'CSV 가져오기(DB 반영) 완료' });
+    } catch (e: unknown) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : 'CSV 가져오기 실패' });
+    }
+    setLoading(false);
+  };
+
+  // 책 추가
+  const handleCreateBook = async (categoryId: string, book: Omit<BibleBook, 'id'>) => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.from('b_bible_books').insert({
+        category_id: categoryId,
+        name: book.name,
+        name_english: book.nameEnglish,
+        abbreviation: book.abbreviation,
+        total_chapters: book.totalChapters,
+        sort_order: book.sortOrder,
+      });
+      if (error) throw error;
+      setToast({ type: 'success', message: '책이 추가되었습니다.' });
+    } catch (e: unknown) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : '책 추가 실패' });
+    }
+    // 목록 새로고침
+    const { data: cats } = await supabase.from('b_categories').select('*').order('sort_order');
+    const { data: books } = await supabase.from('b_bible_books').select('*');
+    setCategories((cats || []).map(cat => ({ ...cat, books: (books || []).filter(b => b.category_id === cat.id) })));
+    setLoading(false);
+  };
+  // 책 수정
+  const handleEditBook = async (id: string, updates: Partial<BibleBook>) => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.from('b_bible_books').update({
+        name: updates.name,
+        name_english: updates.nameEnglish,
+        abbreviation: updates.abbreviation,
+        total_chapters: updates.totalChapters,
+        sort_order: updates.sortOrder,
+      }).eq('id', id);
+      if (error) throw error;
+      setToast({ type: 'success', message: '책이 수정되었습니다.' });
+    } catch (e: unknown) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : '책 수정 실패' });
+    }
+    const { data: cats } = await supabase.from('b_categories').select('*').order('sort_order');
+    const { data: books } = await supabase.from('b_bible_books').select('*');
+    setCategories((cats || []).map(cat => ({ ...cat, books: (books || []).filter(b => b.category_id === cat.id) })));
+    setLoading(false);
+  };
+  // 책 삭제
+  const handleDeleteBook = async (id: string) => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.from('b_bible_books').delete().eq('id', id);
+      if (error) throw error;
+      setToast({ type: 'success', message: '책이 삭제되었습니다.' });
+    } catch (e: unknown) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : '책 삭제 실패' });
+    }
+    const { data: cats } = await supabase.from('b_categories').select('*').order('sort_order');
+    const { data: books } = await supabase.from('b_bible_books').select('*');
+    setCategories((cats || []).map(cat => ({ ...cat, books: (books || []).filter(b => b.category_id === cat.id) })));
+    setLoading(false);
+  };
+  // 책 정렬(순서 변경)
+  const moveBook = async (catId: string, idx: number, dir: -1 | 1) => {
+    setLoading(true);
+    try {
+      const cat = categories.find(c => c.id === catId);
+      if (!cat) return;
+      const books = [...cat.books];
+      const targetIdx = idx + dir;
+      if (targetIdx < 0 || targetIdx >= books.length) return;
+      [books[idx], books[targetIdx]] = [books[targetIdx], books[idx]];
+      // sortOrder 재정렬 및 DB 반영
+      await Promise.all(books.map((b, i) =>
+        supabase.from('b_bible_books').update({ sort_order: i + 1 }).eq('id', b.id)
+      ));
+      setToast({ type: 'success', message: '책 순서가 변경되었습니다.' });
+    } catch (e: unknown) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : '책 순서 변경 실패' });
+    }
+    const { data: cats } = await supabase.from('b_categories').select('*').order('sort_order');
+    const { data: booksAll } = await supabase.from('b_bible_books').select('*');
+    setCategories((cats || []).map(cat => ({ ...cat, books: (booksAll || []).filter(b => b.category_id === cat.id) })));
+    setLoading(false);
   };
 
   // 어코디언 토글
@@ -155,36 +294,38 @@ const CategoryManager: React.FC = () => {
   const closeDialog = () => setShowDialog(null);
 
   // 삭제 버튼 클릭 시 다이얼로그 오픈
-  const openDeleteCategory = (cat: BibleCategory) => {
-    setDeleteDialog({ type: 'category', item: cat, dependentCount: cat.books.length });
+  const openDeleteCategory = async (cat: BibleCategory) => {
+    // 하위 책 개수 실시간 조회
+    const { count } = await supabase.from('b_bible_books').select('*', { count: 'exact', head: true }).eq('category_id', cat.id);
+    setDeleteDialog({ type: 'category', item: cat, dependentCount: count || 0 });
   };
-  const openDeleteBook = (cat: BibleCategory, book: BibleBook) => {
-    // 자료 개수는 더미 0으로 처리(후속 단계에서 실제 자료 수 연동)
-    setDeleteDialog({ type: 'book', item: book, dependentCount: 0 });
+  const openDeleteBook = async (cat: BibleCategory, book: BibleBook) => {
+    // 자료실 참조 개수 실시간 조회
+    const { count } = await supabase.from('b_bible_contents').select('*', { count: 'exact', head: true }).eq('bible_book_id', book.id);
+    setDeleteDialog({ type: 'book', item: book, dependentCount: count || 0 });
   };
   const closeDeleteDialog = () => setDeleteDialog(null);
 
   // 카테고리/책 정렬 순서 변경
-  const moveCategory = (idx: number, dir: -1 | 1) => {
-    setCategories(prev => {
-      const arr = [...prev];
+  const moveCategory = async (idx: number, dir: -1 | 1) => {
+    setLoading(true);
+    try {
+      const arr = [...categories];
       const targetIdx = idx + dir;
-      if (targetIdx < 0 || targetIdx >= arr.length) return arr;
+      if (targetIdx < 0 || targetIdx >= arr.length) return;
       [arr[idx], arr[targetIdx]] = [arr[targetIdx], arr[idx]];
-      // sortOrder 재정렬
-      return arr.map((c, i) => ({ ...c, sortOrder: i + 1 }));
-    });
-  };
-  const moveBook = (catId: string, idx: number, dir: -1 | 1) => {
-    setCategories(prev => prev.map(cat => {
-      if (cat.id !== catId) return cat;
-      const books = [...cat.books];
-      const targetIdx = idx + dir;
-      if (targetIdx < 0 || targetIdx >= books.length) return cat;
-      [books[idx], books[targetIdx]] = [books[targetIdx], books[idx]];
-      // sortOrder 재정렬
-      return { ...cat, books: books.map((b, i) => ({ ...b, sortOrder: i + 1 })) };
-    }));
+      // sortOrder 재정렬 및 DB 반영
+      await Promise.all(arr.map((c, i) =>
+        supabase.from('b_categories').update({ sort_order: i + 1 }).eq('id', c.id)
+      ));
+      setToast({ type: 'success', message: '카테고리 순서가 변경되었습니다.' });
+    } catch (e: unknown) {
+      setToast({ type: 'error', message: e instanceof Error ? e.message : '카테고리 순서 변경 실패' });
+    }
+    const { data: cats } = await supabase.from('b_categories').select('*').order('sort_order');
+    const { data: books } = await supabase.from('b_bible_books').select('*');
+    setCategories((cats || []).map(cat => ({ ...cat, books: (books || []).filter(b => b.category_id === cat.id) })));
+    setLoading(false);
   };
 
   // TODO: 추가/편집/삭제 핸들러(후속 단계)
@@ -232,8 +373,8 @@ const CategoryManager: React.FC = () => {
                       <span className="text-xs text-gray-400 ml-2">순서: {book.sortOrder}</span>
                     </div>
                     <div className="flex gap-1">
-                      <Button size="sm" variant="ghost" onClick={() => moveBook(cat.id, bookIdx, -1)} disabled={bookIdx === 0}><Icon name="chevronUp" size="xs" /></Button>
-                      <Button size="sm" variant="ghost" onClick={() => moveBook(cat.id, bookIdx, 1)} disabled={bookIdx === cat.books.length - 1}><Icon name="chevronDown" size="xs" /></Button>
+                      <Button size="sm" variant="ghost" onClick={async () => await moveBook(cat.id, bookIdx, -1)} disabled={bookIdx === 0}><Icon name="chevronUp" size="xs" /></Button>
+                      <Button size="sm" variant="ghost" onClick={async () => await moveBook(cat.id, bookIdx, 1)} disabled={bookIdx === cat.books.length - 1}><Icon name="chevronDown" size="xs" /></Button>
                       <Button size="sm" variant="ghost" onClick={() => openEditBook(cat.id, book)}><Icon name="edit" size="xs" /></Button>
                       <Button size="sm" variant="danger" onClick={() => openDeleteBook(cat, book)}><Icon name="delete" size="xs" /></Button>
                     </div>
@@ -247,10 +388,10 @@ const CategoryManager: React.FC = () => {
       </div>
       {/* CSV 내보내기/가져오기 버튼 */}
       <div className="mt-2 flex gap-2 items-center">
-        <Button size="sm" variant="outline" onClick={handleExportCSV}><Icon name="download" size="sm" /> CSV 내보내기</Button>
+        <Button size="sm" variant="outline" onClick={handleExportCSV} loading={loading}><Icon name="download" size="sm" /> CSV 내보내기</Button>
         <label className="inline-block">
           <input type="file" accept=".csv" className="hidden" onChange={handleCSVUpload} />
-          <Button size="sm" variant="outline"><Icon name="upload" size="sm" /> CSV 가져오기</Button>
+          <Button size="sm" variant="outline" loading={loading}><Icon name="upload" size="sm" /> CSV 가져오기</Button>
         </label>
       </div>
       {/* CSV 미리보기 및 가져오기 */}
@@ -275,24 +416,49 @@ const CategoryManager: React.FC = () => {
           </div>
           <div className="flex gap-2 mt-2">
             <Button size="sm" variant="ghost" onClick={() => { setCsvPreview(null); setCsvFileName(''); }}>취소</Button>
-            <Button size="sm" variant="primary" onClick={handleImportCSV}>가져오기</Button>
+            <Button size="sm" variant="primary" onClick={handleImportCSV} loading={loading}>가져오기</Button>
           </div>
         </div>
       )}
       {/* 생성/편집 다이얼로그 */}
       {showDialog && (
-        <CategoryBookDialog {...showDialog} onClose={closeDialog} />
+        <CategoryBookDialog
+          {...showDialog}
+          loading={loading}
+          onClose={closeDialog}
+          onSubmit={async (form) => {
+            if (showDialog.type === 'book') {
+              if (showDialog.mode === 'create' && showDialog.categoryId) {
+                await handleCreateBook(showDialog.categoryId, form);
+              } else if (showDialog.mode === 'edit' && showDialog.item) {
+                await handleEditBook((showDialog.item as BibleBook).id, form);
+              }
+            }
+            closeDialog();
+          }}
+        />
       )}
       {/* 삭제 확인 다이얼로그 */}
       {deleteDialog && (
-        <DeleteConfirmation {...deleteDialog} onConfirm={closeDeleteDialog} onCancel={closeDeleteDialog} />
+        <DeleteConfirmation
+          {...deleteDialog}
+          onConfirm={async () => {
+            if (deleteDialog.type === 'book') {
+              await handleDeleteBook((deleteDialog.item as BibleBook).id);
+            }
+            closeDeleteDialog();
+          }}
+          onCancel={closeDeleteDialog}
+        />
       )}
+      {/* Toast UI 렌더링 */}
+      {toast && <Toast type={toast.type} title={toast.type === 'success' ? '성공' : '오류'} message={toast.message} />}
     </div>
   );
 };
 
 // 카테고리/책 생성·편집 다이얼로그 (유효성 검사 포함, 실제 저장은 후속 단계)
-function CategoryBookDialog({ type, mode, item, onClose }: { type: 'category' | 'book'; mode: 'create' | 'edit'; item?: BibleCategory | BibleBook; onClose: () => void }) {
+function CategoryBookDialog({ type, mode, item, onClose, onSubmit, loading }: { type: 'category' | 'book'; mode: 'create' | 'edit'; item?: BibleCategory | BibleBook; onClose: () => void; onSubmit: (form: BibleBookForm) => void; loading: boolean }) {
   const [form, setForm] = useState(() => {
     if (type === 'category') {
       const cat = (item && 'displayName' in item) ? item as BibleCategory : undefined;
@@ -333,8 +499,11 @@ function CategoryBookDialog({ type, mode, item, onClose }: { type: 'category' | 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    // TODO: 실제 저장 로직(후속 단계)
-    onClose();
+    if (type === 'book') {
+      onSubmit(form as BibleBookForm);
+    } else {
+      onClose();
+    }
   };
   return (
     <Modal isOpen={true} onClose={onClose} title={type === 'category' ? (mode === 'create' ? '카테고리 추가' : '카테고리 편집') : (mode === 'create' ? '책 추가' : '책 편집')} size="md">
@@ -365,7 +534,7 @@ function CategoryBookDialog({ type, mode, item, onClose }: { type: 'category' | 
         )}
         <div className="flex gap-2 justify-end mt-4">
           <Button variant="ghost" type="button" onClick={onClose}>취소</Button>
-          <Button variant="primary" type="submit">{mode === 'create' ? '추가' : '저장'}</Button>
+          <Button variant="primary" type="submit" loading={loading}>{mode === 'create' ? '추가' : '저장'}</Button>
         </div>
       </form>
     </Modal>
