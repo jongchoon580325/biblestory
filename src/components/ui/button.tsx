@@ -75,7 +75,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type={type}
-      className={[baseClasses, variantClasses[variant], sizeClasses[size], className].join(' ')}
+      className={[baseClasses, variantClasses[variant], sizeClasses[size]].concat(className).join(' ')}
       disabled={disabled || loading}
       onClick={onClick}
     >

@@ -5,6 +5,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import MainContents from '@/components/main-contents';
 import ScrollToTop from '@/components/scroll-to-top';
+import QueryProvider from './query-provider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,12 +32,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <div className="container mx-auto max-w-[1024px] flex flex-col flex-1 min-h-screen">
-          <Header />
-          <MainContents>{children}</MainContents>
-          <ScrollToTop />
-          <Footer />
-        </div>
+        <QueryProvider>
+          <div className="container mx-auto max-w-[1024px] flex flex-col flex-1 min-h-screen">
+            <Header />
+            <MainContents>{children}</MainContents>
+            <ScrollToTop />
+            <Footer />
+          </div>
+        </QueryProvider>
       </body>
     </html>
   );
