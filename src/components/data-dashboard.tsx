@@ -52,6 +52,7 @@ const DataDashboard: React.FC = () => {
   function DataResetCard() {
     const [showResetDialog, setShowResetDialog] = useState<'data' | 'categories' | null>(null);
     const [isResetting, setIsResetting] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState<null | 'data' | 'categories'>(null);
     // 더미 초기화 핸들러
     const handleReset = async (type: 'data' | 'categories') => {
       setIsResetting(true);
@@ -59,21 +60,24 @@ const DataDashboard: React.FC = () => {
       try {
         if (type === 'data') {
           // 자료/진도/파일만 삭제, 카테고리/책 보존
-          await supabase.from('b_bible_contents').delete().neq('id', '');
+          await supabase.from('b_bible_contents').delete().not('id', 'is', null);
         } else if (type === 'categories') {
           // 카테고리/책/자료 전체 삭제
-          await supabase.from('b_bible_contents').delete().neq('id', '');
-          await supabase.from('b_bible_books').delete().neq('id', '');
-          await supabase.from('b_categories').delete().neq('id', '');
+          await supabase.from('b_bible_contents').delete().not('id', 'is', null);
+          await supabase.from('b_bible_books').delete().not('id', 'is', null);
+          // 실제 카테고리 데이터 전체 삭제
+          const { error } = await supabase.from('b_categories').delete().not('id', 'is', null);
+          if (error) throw error;
         }
         setIsResetting(false);
-        alert(type === 'data' ? '데이터 초기화 완료!' : '카테고리 초기화 완료!');
+        setShowSuccessModal(type);
         // 초기화 후 카테고리 목록 새로고침
         if (categoryManagerRef.current && categoryManagerRef.current.fetchData) {
           categoryManagerRef.current.fetchData();
         }
       } catch (e) {
         setIsResetting(false);
+        setShowSuccessModal(null);
         alert('초기화 오류: ' + (e instanceof Error ? e.message : '알 수 없는 오류'));
       }
     };
@@ -114,6 +118,16 @@ const DataDashboard: React.FC = () => {
                 <Button variant="ghost" onClick={() => setShowResetDialog(null)}>취소</Button>
                 <Button variant="danger" onClick={() => handleReset(showResetDialog)} loading={isResetting}>초기화 진행</Button>
               </div>
+            </div>
+          </Modal>
+        )}
+        {/* 초기화 성공 모달 */}
+        {showSuccessModal && (
+          <Modal isOpen={true} onClose={() => setShowSuccessModal(null)} title="초기화 완료" size="sm">
+            <div className="space-y-2 text-center">
+              <div className="text-2xl text-green-600">✔️</div>
+              <div className="font-bold">{showSuccessModal === 'data' ? '데이터' : '카테고리'} 초기화가 완료되었습니다.</div>
+              <Button variant="primary" onClick={() => setShowSuccessModal(null)} className="mt-4 w-full">확인</Button>
             </div>
           </Modal>
         )}
@@ -236,19 +250,17 @@ function CategoryExportImportCard() {
         categories: data,
         exportedAt: new Date().toISOString(),
       };
-      // JSZip으로 압축
-      const zip = new JSZip();
-      zip.file('categories.json', JSON.stringify(exportData, null, 2));
-      const blob = await zip.generateAsync({ type: 'blob' });
-      setExportProgress(100);
-      // 파일명: yyyy-mm-dd-카테고리-내보내기.zip
+      // JSON 파일로 저장
       const today = new Date().toISOString().slice(0,10);
+      const jsonStr = JSON.stringify(exportData, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${today}-카테고리-내보내기.zip`;
+      a.download = `${today}-카테고리-내보내기.json`;
       a.click();
       URL.revokeObjectURL(url);
+      setExportProgress(100);
       setIsExporting(false);
       setExportProgress(0);
       setToastMsg('카테고리 내보내기 완료!');
@@ -262,13 +274,14 @@ function CategoryExportImportCard() {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (!file.name.endsWith('.zip')) {
-      setToastMsg('ZIP 파일만 업로드 가능합니다.');
+    if (!file.name.endsWith('.json')) {
+      setToastMsg('JSON 파일만 업로드 가능합니다.');
       return;
     }
     setUploadedFile(file);
     setShowPreview(true);
   };
+  const [importResult, setImportResult] = useState<{ success: boolean; message: string } | null>(null);
   const handleCategoryImport = async () => {
     if (!uploadedFile) {
       if (fileInputRef.current) fileInputRef.current.click();
@@ -276,25 +289,72 @@ function CategoryExportImportCard() {
     }
     setIsImporting(true);
     setImportProgress(0);
+    setImportResult(null);
     try {
-      setImportProgress(30);
-      const zip = await JSZip.loadAsync(uploadedFile);
+      setImportProgress(20);
+      // JSON 파일 파싱
+      const jsonStr = await uploadedFile.text();
+      let parsed;
+      try {
+        parsed = JSON.parse(jsonStr);
+      } catch {
+        throw new Error('JSON 파싱 오류: 올바른 JSON 형식이 아닙니다.');
+      }
+      if (!parsed.categories || !Array.isArray(parsed.categories)) throw new Error('카테고리 데이터가 올바르지 않습니다.');
+      const categories = parsed.categories;
+      // 필수 필드/타입 체크
+      for (const cat of categories) {
+        if (!cat.name || typeof cat.name !== 'string') throw new Error('카테고리명 누락/오류');
+        if (!cat.type || (cat.type !== 'group' && cat.type !== 'item')) throw new Error('카테고리 타입 오류');
+      }
       setImportProgress(60);
-      const jsonFile = zip.file('categories.json');
-      if (!jsonFile) throw new Error('categories.json 파일이 없습니다.');
-      await jsonFile.async('string');
+      // 기존 카테고리 전체 삭제
+      const { error: delError } = await supabase.from('b_categories').delete().not('id', 'is', null);
+      if (delError) throw delError;
       setImportProgress(80);
-      // 실제로는 Supabase에 업서트, 현재는 더미
+      // 새 카테고리 일괄 insert (id, parent_id, name, type, order_index만 포함, 순서 보장)
+      const allowedKeys = ['id', 'name', 'type', 'parent_id', 'order_index'];
+      // 1. parent_id가 null인 항목(최상위) 먼저
+      const topLevel = categories.filter((cat: Record<string, unknown>) => !cat.parent_id);
+      const children = categories.filter((cat: Record<string, unknown>) => cat.parent_id);
+      // 2. 필터링 함수
+      const filterKeys = (cat: Record<string, unknown>) => {
+        const filtered: Record<string, unknown> = {};
+        for (const key of allowedKeys) {
+          if (cat[key] !== undefined) filtered[key] = cat[key];
+        }
+        if (!('parent_id' in filtered)) filtered.parent_id = null;
+        if (typeof filtered.order_index !== 'number') filtered.order_index = 0;
+        return filtered;
+      };
+      // 3. insert 순서대로 실행
+      let insError = null;
+      // 3-1. 최상위 카테고리 insert
+      if (topLevel.length > 0) {
+        const { error } = await supabase.from('b_categories').insert(topLevel.map(filterKeys));
+        if (error) insError = error;
+      }
+      // 3-2. 하위 카테고리 insert
+      if (!insError && children.length > 0) {
+        const { error } = await supabase.from('b_categories').insert(children.map(filterKeys));
+        if (error) insError = error;
+      }
+      if (insError) {
+        console.error('카테고리 insert 에러:', insError);
+        setImportResult({ success: false, message: insError.message });
+        return;
+      }
       setImportProgress(100);
       setIsImporting(false);
       setImportProgress(0);
       setUploadedFile(null);
       setShowPreview(false);
-      setToastMsg('카테고리 가져오기 완료!');
+      setImportResult({ success: true, message: '카테고리 가져오기 완료!' });
+      setTimeout(() => window.location.reload(), 1200);
     } catch (e) {
       setIsImporting(false);
       setImportProgress(0);
-      setToastMsg('가져오기 오류: ' + (e instanceof Error ? e.message : '알 수 없는 오류'));
+      setImportResult({ success: false, message: e instanceof Error ? e.message : '가져오기 오류' });
     }
   };
   return (
@@ -317,7 +377,7 @@ function CategoryExportImportCard() {
         <div className="flex-1 flex flex-col items-center justify-center">
           <input
             type="file"
-            accept=".zip"
+            accept=".json"
             onChange={handleFileUpload}
             className="mb-2 w-full"
             disabled={isImporting}
@@ -337,7 +397,7 @@ function CategoryExportImportCard() {
         <Modal isOpen={true} onClose={() => setShowExportConfirm(false)} title="정말 내보내기 하시겠습니까?" size="md">
           <div className="space-y-2 text-center">
             <div className="text-2xl">📦</div>
-            <div className="font-bold">카테고리 데이터를 ZIP 파일로 내보냅니다.</div>
+            <div className="font-bold">카테고리 데이터를 JSON 파일로 내보냅니다.</div>
             <div className="text-sm text-neutral-400">진행하시겠습니까?</div>
             <div className="flex gap-2 mt-4 justify-center">
               <Button variant="ghost" onClick={() => setShowExportConfirm(false)}>취소</Button>
@@ -357,6 +417,16 @@ function CategoryExportImportCard() {
               <Button variant="ghost" onClick={() => setShowPreview(false)}>취소</Button>
               <Button variant="primary" onClick={() => { setShowPreview(false); handleCategoryImport(); }}>가져오기 시작</Button>
             </div>
+          </div>
+        </Modal>
+      )}
+      {/* 가져오기 결과 모달 */}
+      {importResult && (
+        <Modal isOpen={true} onClose={() => setImportResult(null)} title={importResult.success ? '가져오기 성공' : '가져오기 실패'} size="sm">
+          <div className="space-y-2 text-center">
+            <div className={`text-2xl ${importResult.success ? 'text-green-600' : 'text-red-600'}`}>{importResult.success ? '✔️' : '❌'}</div>
+            <div className="font-bold">{importResult.message}</div>
+            <Button variant="primary" onClick={() => setImportResult(null)} className="mt-4 w-full">확인</Button>
           </div>
         </Modal>
       )}
