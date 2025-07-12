@@ -1,5 +1,10 @@
 ### 2025-07-12
 
+4. **문서: github storage 사용법 문서 추가 및 커밋/푸시** (80ac50f)
+  - docs/github storage.md: GitHub 저장소 초기화, 원격 연결, 첫 커밋/푸시 방법 예시 추가
+  - 커밋/푸시: 문서 추가 및 커밋 히스토리 최신화, main 브랜치에 반영
+  - 커밋 메시지: docs: github storage 사용법 문서 추가 및 커밋 히스토리 문서 최신화
+
 3. **기능: 카테고리 관리 실데이터 내보내기/다운로드, 폼/UX/접근성 개선, DB/샘플/초기화/문서 반영** (4a04910)
   - 카테고리 내보내기: Supabase b_categories 실데이터 zip 다운로드 구현
   - CategoryForm: React Hook Form + Zod, 다중입력, 자동 성경책 입력, UX/접근성 개선
