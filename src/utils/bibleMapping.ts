@@ -81,9 +81,9 @@ export const BIBLE_BOOKS: BibleBook[] = [
 
 // 파일명에서 책명 추출 함수
 export function extractBookFromFileName(fileName: string): BibleBook | null {
-  // 파일명 패턴: 00-genesis-01.html, 00-genesis_02.html, 00-genesis-tree.html 등
-  // 하이픈 다음의 책명 부분만 캡처 (언더스코어나 하이픈 이전까지)
-  const match = fileName.match(/00-([a-zA-Z0-9]+)(?:[-_][a-zA-Z0-9]+)?\.html/);
+  // 파일명 패턴: 01-genesis-01.html, 25-exodus_02.html, 001-psalms-001.html, 150-psalms-150.html 등
+  // 2자리 또는 3자리 숫자 접두사 다음의 책명 부분만 캡처 (언더스코어나 하이픈 이전까지)
+  const match = fileName.match(/[0-9]{2,3}-([a-zA-Z0-9]+)(?:[-_][a-zA-Z0-9]+)?\.html/);
   if (!match) return null;
   
   const englishName = match[1].toLowerCase();

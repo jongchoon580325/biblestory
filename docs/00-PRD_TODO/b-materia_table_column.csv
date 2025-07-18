@@ -1,0 +1,10 @@
+column_name,data_type,is_nullable,character_maximum_length
+id,uuid,NO,null
+created_at,timestamp with time zone,YES,null
+updated_at,timestamp with time zone,YES,null
+category_id,uuid,NO,null
+chapter,integer,NO,null
+file_name,text,NO,null
+storage_path,text,NO,null
+file_size,bigint,NO,null
+mime_type,text,NO,null
