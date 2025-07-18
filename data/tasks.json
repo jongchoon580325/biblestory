@@ -1,0 +1,123 @@
+{
+  "tasks": [
+    {
+      "id": "9677c321-8f53-490b-8cda-9f416fed9fcb",
+      "name": "테이블 리스트 UI 구현",
+      "description": "책명별 테이블 리스트 페이지 구현. Supabase b_materials 테이블과 biblefiles Storage 연동, 책명/장/파일명/파일보기/다운로드/관리(수정/삭제)/검색/페이지네이션/항목보기 콤보/위로가기/반응형 등 모든 기능 포함.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2025-07-17T06:06:34.022Z",
+      "updatedAt": "2025-07-17T06:06:34.022Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/data/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "테이블 리스트 UI 및 로직 구현"
+        }
+      ],
+      "implementationGuide": "1. Supabase에서 b_materials, biblefiles 데이터 fetch. 2. 테이블 헤더/행/검색/페이지네이션/항목보기 콤보/위로가기 UI 구현. 3. 파일보기/다운로드/수정/삭제 기능 연결. 4. Tailwind CSS, Lucid icon, 다크모드, 반응형 적용.",
+      "verificationCriteria": "- 모든 항목 정상 노출 및 기능 동작\n- Supabase 연동 및 데이터 일치\n- 검색/페이지네이션/다운로드/삭제/수정/파일보기 정상 동작\n- 반응형/다크모드/접근성/UX 일관성",
+      "analysisResult": "Bible 책 명별 테이블 리스트 및 상세페이지/미리보기 PRD 기반 Task 분석 및 설계안에 대한 구조/중복/성능/일관성/통합성/최적화 검토. 요구사항(테이블 리스트, 상세페이지, Supabase 연동, UX, 타입/성능/접근성 등) 모두 반영. 기존 데이터 관리/업로드/다운로드/삭제/초기화 로직과 중복되는 부분은 재사용(예: Supabase CRUD, 모달/토스트/검색/페이지네이션 등), 필요시 유틸/공통 컴포넌트로 추출. 성능: 대용량 데이터 대응 위해 페이지네이션, 검색, useMemo 등 메모이제이션, 불필요한 리렌더링 방지, Storage 연동 최적화. 일관성: camelCase, kebab-case, 타입 명확화, 주석/문서화, ESLint/Prettier 적용, 접근성/반응형/UX 일관성 유지. 통합성: 기존 데이터 관리/카테고리/파일업로드 구조와 자연스럽게 연동, b_materials/Storage 매핑, 기존 모듈 영향 최소화. 최적화: 공통 로직/컴포넌트 추출, 코드 중복 최소화, 확장성 고려, 테스트/검증 반복. 결론: 기존 구조/패턴과 완벽히 통합되며, 실무적 요구와 확장성/유지보수성/성능/UX 모두 충족하는 설계."
+    },
+    {
+      "id": "45d424c0-1ce2-44d5-bf7b-dfdee770a55a",
+      "name": "상세페이지(HTML 랜더링) 및 편집기 구현",
+      "description": "테이블 리스트에서 파일보기 클릭 시, 완벽하게 랜더링된 html 상세페이지 모달 구현. 편집(좌: 소스, 우: 미리보기), 전체보기, 닫기, 스크롤, 반응형 포함.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "9677c321-8f53-490b-8cda-9f416fed9fcb"
+        }
+      ],
+      "createdAt": "2025-07-17T06:06:34.022Z",
+      "updatedAt": "2025-07-17T06:06:34.022Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/data/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "상세페이지/모달/편집기/랜더링 로직 구현"
+        }
+      ],
+      "implementationGuide": "1. 모달 컴포넌트 설계 및 html 랜더링. 2. 편집기(좌: 소스, 우: 미리보기) UI/로직 구현. 3. 전체보기/닫기/스크롤/반응형/다크모드 적용.",
+      "verificationCriteria": "- html 파일 완벽 랜더링\n- 편집/미리보기/저장 정상 동작\n- 전체보기/닫기/반응형/다크모드/접근성/UX 일관성",
+      "analysisResult": "Bible 책 명별 테이블 리스트 및 상세페이지/미리보기 PRD 기반 Task 분석 및 설계안에 대한 구조/중복/성능/일관성/통합성/최적화 검토. 요구사항(테이블 리스트, 상세페이지, Supabase 연동, UX, 타입/성능/접근성 등) 모두 반영. 기존 데이터 관리/업로드/다운로드/삭제/초기화 로직과 중복되는 부분은 재사용(예: Supabase CRUD, 모달/토스트/검색/페이지네이션 등), 필요시 유틸/공통 컴포넌트로 추출. 성능: 대용량 데이터 대응 위해 페이지네이션, 검색, useMemo 등 메모이제이션, 불필요한 리렌더링 방지, Storage 연동 최적화. 일관성: camelCase, kebab-case, 타입 명확화, 주석/문서화, ESLint/Prettier 적용, 접근성/반응형/UX 일관성 유지. 통합성: 기존 데이터 관리/카테고리/파일업로드 구조와 자연스럽게 연동, b_materials/Storage 매핑, 기존 모듈 영향 최소화. 최적화: 공통 로직/컴포넌트 추출, 코드 중복 최소화, 확장성 고려, 테스트/검증 반복. 결론: 기존 구조/패턴과 완벽히 통합되며, 실무적 요구와 확장성/유지보수성/성능/UX 모두 충족하는 설계."
+    },
+    {
+      "id": "0ccb49f1-7e5a-4cbb-b2bd-d5a24a9ab839",
+      "name": "Supabase 연동 및 CRUD/다운로드/삭제/수정 로직 구현",
+      "description": "b_materials 테이블, biblefiles Storage와 CRUD 연동. 파일/메타데이터 매핑, 삭제/다운로드/업로드/수정 로직 구현.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2025-07-17T06:06:34.022Z",
+      "updatedAt": "2025-07-17T06:06:34.022Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/data/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "Supabase 연동 및 CRUD 로직 구현"
+        }
+      ],
+      "implementationGuide": "1. Supabase client 연동. 2. b_materials/biblefiles CRUD 함수 구현. 3. 파일/메타데이터 매핑, 삭제/다운로드/업로드/수정 로직 작성.",
+      "verificationCriteria": "- CRUD/다운로드/삭제/수정 정상 동작\n- 테이블/Storage 데이터 일치\n- 예외/에러 처리, 타입 안정성, 테스트 통과",
+      "analysisResult": "Bible 책 명별 테이블 리스트 및 상세페이지/미리보기 PRD 기반 Task 분석 및 설계안에 대한 구조/중복/성능/일관성/통합성/최적화 검토. 요구사항(테이블 리스트, 상세페이지, Supabase 연동, UX, 타입/성능/접근성 등) 모두 반영. 기존 데이터 관리/업로드/다운로드/삭제/초기화 로직과 중복되는 부분은 재사용(예: Supabase CRUD, 모달/토스트/검색/페이지네이션 등), 필요시 유틸/공통 컴포넌트로 추출. 성능: 대용량 데이터 대응 위해 페이지네이션, 검색, useMemo 등 메모이제이션, 불필요한 리렌더링 방지, Storage 연동 최적화. 일관성: camelCase, kebab-case, 타입 명확화, 주석/문서화, ESLint/Prettier 적용, 접근성/반응형/UX 일관성 유지. 통합성: 기존 데이터 관리/카테고리/파일업로드 구조와 자연스럽게 연동, b_materials/Storage 매핑, 기존 모듈 영향 최소화. 최적화: 공통 로직/컴포넌트 추출, 코드 중복 최소화, 확장성 고려, 테스트/검증 반복. 결론: 기존 구조/패턴과 완벽히 통합되며, 실무적 요구와 확장성/유지보수성/성능/UX 모두 충족하는 설계."
+    },
+    {
+      "id": "9316387f-6067-40a0-b7e4-1b8c60e189ec",
+      "name": "공통 컴포넌트/유틸/훅 추출 및 재사용성 강화",
+      "description": "중복되는 로직/컴포넌트(모달, 토스트, 검색, 페이지네이션 등) 공통화 및 재사용성 강화. 기존 코드와 통합.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "9677c321-8f53-490b-8cda-9f416fed9fcb"
+        },
+        {
+          "taskId": "45d424c0-1ce2-44d5-bf7b-dfdee770a55a"
+        }
+      ],
+      "createdAt": "2025-07-17T06:06:34.022Z",
+      "updatedAt": "2025-07-17T06:06:34.022Z",
+      "relatedFiles": [
+        {
+          "path": "src/components/",
+          "type": "TO_MODIFY",
+          "description": "공통 컴포넌트/유틸/훅 분리 및 통합"
+        }
+      ],
+      "implementationGuide": "1. 중복 로직/컴포넌트 분석. 2. 공통 컴포넌트/유틸/훅 추출 및 src/components, src/utils 등으로 분리. 3. 기존 코드와 통합 및 테스트.",
+      "verificationCriteria": "- 중복 최소화\n- 공통 컴포넌트/유틸/훅 재사용\n- 기존 코드와 통합, 테스트 통과",
+      "analysisResult": "Bible 책 명별 테이블 리스트 및 상세페이지/미리보기 PRD 기반 Task 분석 및 설계안에 대한 구조/중복/성능/일관성/통합성/최적화 검토. 요구사항(테이블 리스트, 상세페이지, Supabase 연동, UX, 타입/성능/접근성 등) 모두 반영. 기존 데이터 관리/업로드/다운로드/삭제/초기화 로직과 중복되는 부분은 재사용(예: Supabase CRUD, 모달/토스트/검색/페이지네이션 등), 필요시 유틸/공통 컴포넌트로 추출. 성능: 대용량 데이터 대응 위해 페이지네이션, 검색, useMemo 등 메모이제이션, 불필요한 리렌더링 방지, Storage 연동 최적화. 일관성: camelCase, kebab-case, 타입 명확화, 주석/문서화, ESLint/Prettier 적용, 접근성/반응형/UX 일관성 유지. 통합성: 기존 데이터 관리/카테고리/파일업로드 구조와 자연스럽게 연동, b_materials/Storage 매핑, 기존 모듈 영향 최소화. 최적화: 공통 로직/컴포넌트 추출, 코드 중복 최소화, 확장성 고려, 테스트/검증 반복. 결론: 기존 구조/패턴과 완벽히 통합되며, 실무적 요구와 확장성/유지보수성/성능/UX 모두 충족하는 설계."
+    },
+    {
+      "id": "e97bac11-8c4d-498e-8b36-81ea489fa74c",
+      "name": "UX/접근성/성능 최적화 및 테스트",
+      "description": "모달/토스트/다크모드/반응형/접근성/성능 등 UX 및 품질 최적화. ESLint/Prettier/타입스크립트 규칙 준수, 테스트 및 검증 반복.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "9677c321-8f53-490b-8cda-9f416fed9fcb"
+        },
+        {
+          "taskId": "45d424c0-1ce2-44d5-bf7b-dfdee770a55a"
+        },
+        {
+          "taskId": "0ccb49f1-7e5a-4cbb-b2bd-d5a24a9ab839"
+        },
+        {
+          "taskId": "9316387f-6067-40a0-b7e4-1b8c60e189ec"
+        }
+      ],
+      "createdAt": "2025-07-17T06:06:34.022Z",
+      "updatedAt": "2025-07-17T06:06:34.022Z",
+      "relatedFiles": [
+        {
+          "path": "src/app/data/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "UX/접근성/성능 최적화 및 테스트"
+        }
+      ],
+      "implementationGuide": "1. UX(모달, 토스트, 다크모드, 반응형) 개선. 2. 접근성(A11y) 및 성능 최적화. 3. ESLint/Prettier/타입스크립트 규칙 적용. 4. 테스트/검증 반복.",
+      "verificationCriteria": "- UX/접근성/성능 최적화\n- ESLint/Prettier/타입스크립트 규칙 준수\n- 테스트/검증 반복, 모든 기능 정상 동작",
+      "analysisResult": "Bible 책 명별 테이블 리스트 및 상세페이지/미리보기 PRD 기반 Task 분석 및 설계안에 대한 구조/중복/성능/일관성/통합성/최적화 검토. 요구사항(테이블 리스트, 상세페이지, Supabase 연동, UX, 타입/성능/접근성 등) 모두 반영. 기존 데이터 관리/업로드/다운로드/삭제/초기화 로직과 중복되는 부분은 재사용(예: Supabase CRUD, 모달/토스트/검색/페이지네이션 등), 필요시 유틸/공통 컴포넌트로 추출. 성능: 대용량 데이터 대응 위해 페이지네이션, 검색, useMemo 등 메모이제이션, 불필요한 리렌더링 방지, Storage 연동 최적화. 일관성: camelCase, kebab-case, 타입 명확화, 주석/문서화, ESLint/Prettier 적용, 접근성/반응형/UX 일관성 유지. 통합성: 기존 데이터 관리/카테고리/파일업로드 구조와 자연스럽게 연동, b_materials/Storage 매핑, 기존 모듈 영향 최소화. 최적화: 공통 로직/컴포넌트 추출, 코드 중복 최소화, 확장성 고려, 테스트/검증 반복. 결론: 기존 구조/패턴과 완벽히 통합되며, 실무적 요구와 확장성/유지보수성/성능/UX 모두 충족하는 설계."
+    }
+  ]
+}

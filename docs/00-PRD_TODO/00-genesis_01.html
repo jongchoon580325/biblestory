@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>창세기 3장 - 인류의 타락과 원복음</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 구약 테마 페이지 헤더 */
+        .page-header {
+            background: linear-gradient(135deg, #8B4513 0%, #CD853F 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #D2691E, #A0522D, #8B4513);
+        }
+
+        .page-title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .book-chapter {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .title-separator {
+            font-size: 28px;
+            font-weight: 300;
+        }
+
+        .content-title {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        /* 섹션 헤더 */
+        .section-header {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .section-header h1 {
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        /* 스토리 섹션 */
+        .story-section {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .section-number {
+            background: #3498db;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 16px;
+        }
+
+        /* 구절 블록 */
+        .verse-block {
+            background: white;
+            border-left: 3px solid #bdc3c7;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .verse-number {
+            color: #3498db;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        /* 캐릭터 프로필 */
+        .character-profile {
+            background: linear-gradient(135deg, #8B4513 0%, #CD853F 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character-profile::after {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 40px;
+            opacity: 0.3;
+        }
+
+        .character-profile.serpent {
+            background: linear-gradient(135deg, #8e44ad 0%, #2c3e50 100%);
+        }
+
+        .character-profile.serpent::after {
+            content: '🐍';
+        }
+
+        .character-profile.eve::after {
+            content: '👩';
+        }
+
+        .character-profile.adam::after {
+            content: '👨';
+        }
+
+        .character-profile.god::after {
+            content: '⚖️';
+        }
+
+        .character-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .character-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-item {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .detail-item strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        /* 대화 섹션 */
+        .dialogue-section {
+            margin: 20px 0;
+        }
+
+        .dialogue {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .dialogue.serpent {
+            background: #f3e5f5;
+            border-left: 4px solid #8e44ad;
+        }
+
+        .dialogue.eve {
+            background: #fce4ec;
+            border-left: 4px solid #e91e63;
+        }
+
+        .dialogue.adam {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+        }
+
+        .dialogue.god {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .speaker {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        /* 메시지 박스 */
+        .message-box {
+            background: #e8f4fd;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .message-box::before {
+            content: '📢';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #e8f4fd;
+            padding: 0 5px;
+            font-size: 20px;
+        }
+
+        .message-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #3498db;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+
+        /* 경고 메시지 */
+        .warning-message {
+            background: #fdedec;
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .warning-message::before {
+            content: '⚠️';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #fdedec;
+            padding: 0 5px;
+            font-size: 20px;
+        }
+
+        .warning-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #e74c3c;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+
+        /* 희망 메시지 */
+        .hope-message {
+            background: #d4edda;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .hope-message::before {
+            content: '✨';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #d4edda;
+            padding: 0 5px;
+            font-size: 20px;
+        }
+
+        .hope-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #27ae60;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+
+        /* 타임라인 */
+        .timeline-section {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -37px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.8);
+        }
+
+        .timeline-content {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-time {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* 3단계 유혹 분석 */
+        .temptation-analysis {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .temptation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .temptation-item {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .temptation-step {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* 심판과 긍휼 비교 */
+        .comparison-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .comparison-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .compare-item {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .vs-divider {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            background: rgba(255,255,255,0.3);
+            padding: 10px;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 범례 */
+        .legend {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        .legend h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .page-title {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .timeline {
+                padding-left: 25px;
+            }
+
+            .timeline-marker {
+                left: -32px;
+                width: 12px;
+                height: 12px;
+            }
+
+            .book-chapter {
+                font-size: 20px;
+            }
+
+            .content-title {
+                font-size: 28px;
+            }
+
+            .character-details {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .vs-divider {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                justify-self: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 페이지 헤더 -->
+        <div class="page-header">
+            <div class="page-title">
+                <span class="book-chapter">창세기 3장</span>
+                <span class="title-separator">-</span>
+                <span class="content-title">인류의 타락과 원복음</span>
+            </div>
+            <div class="page-subtitle">
+                <span class="description">죄의 기원과 하나님의 심판, 그리고 첫 번째 구원의 약속</span>
+                <span class="verse-range">(창 3:1-24)</span>
+            </div>
+        </div>
+
+        <!-- 섹션 헤더 -->
+        <div class="section-header">
+            <h1>🐍 뱀이 여자에게 이르되 너희가 절대로 죽지 않으리라</h1>
+            <p>창세기 3장은 인류 역사상 가장 비극적인 사건인 타락을 기록하지만, 동시에 첫 번째 구원의 소망도 제시합니다.</p>
+        </div>
+
+        <!-- 타락 과정 타임라인 -->
+        <div class="timeline-section">
+            <div class="timeline-header">
+                <h3>⏰ 타락의 전개 과정</h3>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time">1단계</div>
+                        <div class="timeline-title">뱀의 접근과 의심 유발</div>
+                        <div class="timeline-desc">"정말 하나님께서... 말씀하셨느냐?" - 하나님의 말씀에 대한 의심 심기</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time">2단계</div>
+                        <div class="timeline-title">하와의 잘못된 대답</div>
+                        <div class="timeline-desc">명령에 "건드리지도 마라"를 추가하며 하나님의 말씀을 변경</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time">3단계</div>
+                        <div class="timeline-title">뱀의 직접적 거짓말</div>
+                        <div class="timeline-desc">"절대로 죽지 않을 것이다" - 하나님의 경고를 정면으로 부정</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time">4단계</div>
+                        <div class="timeline-title">거짓 약속과 유혹</div>
+                        <div class="timeline-desc">"하나님처럼 될 것이다" - 교만과 탐욕을 자극하는 거짓 약속</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time">5단계</div>
+                        <div class="timeline-title">범죄와 즉각적 결과</div>
+                        <div class="timeline-desc">선악과를 먹고 수치심과 두려움이 시작됨</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 뱀의 유혹과 첫 번째 대화 -->
+        <div class="story-section">
+            <div class="section-title">
+                <div class="section-number">1</div>
+                뱀의 교활한 유혹 전략
+            </div>
+            <div class="story-content">
+                <div class="verse-block">
+                    <span class="verse-number">창3:1</span>
+                    여호와 하나님께서 만드신 들짐승 가운데 뱀이 가장 교활했습니다. 그가 여자에게 말했습니다. "정말 하나님께서 '동산의 어떤 나무의 열매도 먹으면 안 된다'라고 말씀하셨느냐?"
+                </div>
+                
+                <div class="dialogue-section">
+                    <div class="dialogue serpent">
+                        <div class="speaker">🐍 뱀의 첫 번째 공략</div>
+                        <p><strong>"정말 하나님께서... 말씀하셨느냐?"</strong></p>
+                        <p>• 의심의 씨앗 심기</p>
+                        <p>• 하나님의 말씀 왜곡 (과장하여 인용)</p>
+                        <p>• "정말"이라는 의문 부사로 확신 흔들기</p>
+                    </div>
+                </div>
+                
+                <p><strong>핵심 의미:</strong> 뱀의 첫 번째 전략은 하나님의 말씀에 대한 의심을 심는 것입니다. 하나님이 금하신 것은 한 나무뿐이었지만, "어떤 나무의 열매도"라고 과장했습니다.</p>
+            </div>
+        </div>
+
+        <!-- 뱀 캐릭터 프로필 -->
+        <div class="character-profile serpent">
+            <div class="character-name">🐍 뱀 (사탄)</div>
+            <div class="character-details">
+                <div class="detail-item">
+                    <strong>특징</strong><br>
+                    "가장 교활한" 존재 - 지혜롭지만 악용하는 자
+                </div>
+                <div class="detail-item">
+                    <strong>유혹 전략 1</strong><br>
+                    의심 심기 - "정말... 하셨느냐?"
+                </div>
+                <div class="detail-item">
+                    <strong>유혹 전략 2</strong><br>
+                    말씀 왜곡 - 과장하여 인용
+                </div>
+                <div class="detail-item">
+                    <strong>유혹 전략 3</strong><br>
+                    직접적 거짓말 - "절대로 죽지 않을 것"
+                </div>
+                <div class="detail-item">
+                    <strong>유혹 전략 4</strong><br>
+                    거짓 약속 - "하나님처럼 될 것"
+                </div>
+                <div class="detail-item">
+                    <strong>심판</strong><br>
+                    배로 기어 다니며 흙을 먹는 저주
+                </div>
+            </div>
+        </div>
+
+        <!-- 하와의 대답과 실수 -->
+        <div class="story-section">
+            <div class="section-title">
+                <div class="section-number">2</div>
+                하와의 대답과 말씀 변경
+            </div>
+            <div class="story-content">
+                <div class="verse-block">
+                    <span class="verse-number">창3:2-3</span>
+                    여자가 뱀에게 말했습니다. "우리는 동산에 있는 나무들의 열매를 먹어도 된다. 그러나 하나님께서 '동산 한가운데 있는 나무의 열매는 죽지 않으려거든 먹지도 말고 건드리지도 마라'고 말씀하셨다."
+                </div>
+                
+                <div class="dialogue-section">
+                    <div class="dialogue eve">
+                        <div class="speaker">👩 하와의 대답</div>
+                        <p><strong>올바른 부분:</strong> "동산에 있는 나무들의 열매를 먹어도 된다"</p>
+                        <p><strong>문제가 된 부분:</strong> "건드리지도 마라" (원래 명령에 없던 내용 추가)</p>
+                        <p><strong>결과:</strong> 하나님의 말씀을 더 엄격하게 만들어 불만 조성</p>
+                    </div>
+                </div>
+                
+                <div class="comparison-section">
+                    <div class="comparison-title">📜 하나님의 원래 명령 vs 하와의 인용</div>
+                    <div class="comparison-grid">
+                        <div class="compare-item">
+                            <h4>하나님의 원래 명령 (창2:17)</h4>
+                            <p>"선과 악을 알게 하는 나무의 열매는 <strong>먹지 마라</strong>"</p>
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="compare-item">
+                            <h4>하와의 인용 (창3:3)</h4>
+                            <p>"<strong>먹지도 말고 건드리지도 마라</strong>"</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p><strong>핵심 의미:</strong> 하와는 하나님의 말씀에 "건드리지도 마라"를 추가했습니다. 이는 하나님의 명령을 더 부담스럽게 만들어 불순종의 토대를 마련했습니다.</p>
+            </div>
+        </div>
+
+        <!-- 뱀의 거짓말과 유혹 -->
+        <div class="story-section">
+            <div class="section-title">
+                <div class="section-number">3</div>
+                뱀의 거짓말과 거짓 약속
+            </div>
+            <div class="story-content">
+                <div class="verse-block">
+                    <span class="verse-number">창3:4-5</span>
+                    뱀이 여자에게 말했습니다. "너희가 절대로 죽지 않을 것이다. 이는 너희가 그것을 먹는 날에는 너희 눈이 열려서 너희가 선과 악을 아시는 하나님처럼 될 것을 하나님께서 아시기 때문이다."
+                </div>
+                
+                <div class="dialogue-section">
+                    <div class="dialogue serpent">
+                        <div class="speaker">🐍 뱀의 최종 공격</div>
+                        <p><strong>직접적 거짓말:</strong> "절대로 죽지 않을 것이다"</p>
+                        <p><strong>하나님 모독:</strong> 하나님이 질투해서 금하신다고 암시</p>
+                        <p><strong>거짓 약속:</strong> "하나님처럼 될 것이다"</p>
+                        <p><strong>교만 자극:</strong> 피조물이 창조주와 같아질 수 있다는 환상</p>
+                    </div>
+                </div>
+                
+                <p><strong>핵심 의미:</strong> 뱀은 하나님의 경고를 정면으로 부정하고, 하나님의 동기까지 의심하게 만들었습니다. 이는 모든 죄의 근본인 교만을 자극한 것입니다.</p>
+            </div>
+        </div>
+
+        <!-- 3단계 유혹 분석 -->
+        <div class="temptation-analysis">
+            <h3 style="text-align: center; margin-bottom: 20px;">🎯 하와가 경험한 3단계 유혹 (창3:6)</h3>
+            <p style="text-align: center; margin-bottom: 20px;">"여자가 보니 그 나무의 열매가 먹기에 좋고 눈으로 보기에도 좋으며 지혜롭게 할 만큼 탐스러워 보였습니다"</p>
+            <div class="temptation-grid">
+                <div class="temptation-item">
+                    <div class="temptation-step">1. 육신의 정욕</div>
+                    <div style="font-size: 30px; margin: 15px 0;">🍎</div>
+                    <p><strong>"먹기에 좋고"</strong></p>
+                    <p>기본적 욕구와 필요를 왜곡</p>
+                    <p>하나님이 주신 것으로 만족하지 못함</p>
+                </div>
+                <div class="temptation-item">
+                    <div class="temptation-step">2. 안목의 정욕</div>
+                    <div style="font-size: 30px; margin: 15px 0;">👁️</div>
+                    <p><strong>"눈으로 보기에도 좋으며"</strong></p>
+                    <p>시각적 아름다움에 현혹</p>
+                    <p>외적인 것에 마음을 빼앗김</p>
+                </div>
+                <div class="temptation-item">
+                    <div class="temptation-step">3. 이생의 자랑</div>
+                    <div style="font-size: 30px; margin: 15px 0;">🧠</div>
+                    <p><strong>"지혜롭게 할 만큼 탐스러워"</strong></p>
+                    <p>지식과 지혜에 대한 교만</p>
+                    <p>하나님처럼 되고자 하는 욕망</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 범죄와 즉각적 결과 -->
+        <div class="story-section">
+            <div class="section-title">
+                <div class="section-number">4</div>
+                범죄와 즉각적인 변화
+            </div>
+            <div class="story-content">
+                <div class="verse-block">
+                    <span class="verse-number">창3:6-7</span>
+                    여자가 그 열매를 따서 먹었습니다. 그리고 자기와 함께 있는 남자에게도 주니 그도 먹었습니다. 그러자 그 두 사람의 눈이 밝아져 자신들이 벌거벗었음을 알게 됐습니다. 그들은 자신들을 위해 무화과나무 잎을 엮어 옷을 만들었습니다.
+                </div>
+                
+                <div style="background: #fdedec; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #e74c3c;">
+                    <h4 style="color: #c0392b; margin-bottom: 15px;">⚡ 타락의 즉각적 결과</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div>
+                            <h5 style="color: #e74c3c;">🔓 약속된 결과</h5>
+                            <p>• "눈이 열릴 것이다" ✅</p>
+                            <p>• "선악을 알게 될 것이다" ✅</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #e74c3c;">😰 예상치 못한 결과</h5>
+                            <p>• 수치심의 시작</p>
+                            <p>• 두려움과 숨음</p>
+                            <p>• 관계의 파괴</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #e74c3c;">🚫 거짓말로 판명</h5>
+                            <p>• "하나님처럼 되지" 못함</p>
+                            <p>• 영적 죽음 시작</p>
+                            <p>• 에덴에서 추방</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p><strong>핵심 의미:</strong> 뱀의 약속은 반쪽 진실이었습니다. 눈은 열렸지만 지혜가 아닌 수치를 보게 되었고, 하나님처럼 되기는커녕 더 비참해졌습니다.</p>
+            </div>
+        </div>
+
+        <!-- 하나님의 추궁과 변명 -->
+        <div class="story-section">
+            <div class="section-title">
+                <div class="section-number">5</div>
+                하나님의 추궁과 인간의 변명
+            </div>
+            <div class="story-content">
+                <div class="verse-block">
+                    <span class="verse-number">창3:8-13</span>
+                    서늘한 바람이 부는 그날 동산을 거니시는 여호와 하나님의 소리를 듣고 아담과 그의 아내가 여호와의 낯을 피해 동산의 나무 사이로 숨었습니다. 여호와 하나님께서 아담을 부르시며, "네가 어디 있느냐"고 말씀하셨습니다. 아담이 대답했습니다. "제가 동산에서 하나님의 소리를 듣고 벌거벗은 것이 두려워 숨었습니다." 하나님께서 말씀하셨습니다. "누가 네게 네가 벌거벗었다는 것을 말해 주었느냐? 내가 먹지 말라고 네게 명령한 그 나무 열매를 네가 먹었느냐?" 아담이 말했습니다. "하나님께서 함께하라고 제게 주신 그 여자가 그 나무 열매를 제게 주어서 제가 먹었습니다." 여호와 하나님께서 그 여자에게 말씀하셨습니다. "네가 어째서 이런 일을 저질렀느냐?" 여자가 말했습니다. "뱀이 저를 꾀어서 제가 먹었습니다."
+                </div>
+                
+                <div class="dialogue-section">
+                    <div class="dialogue god">
+                        <div class="speaker">🔷 하나님의 추궁</div>
+                        <p><strong>"네가 어디 있느냐?"</strong> - 위치가 아닌 영적 상태를 묻는 질문</p>
+                        <p><strong>"누가 네게... 말해 주었느냐?"</strong> - 죄의 깨달음에 대한 질문</p>
+                        <p><strong>"내가 명령한... 네가 먹었느냐?"</strong> - 직접적 확인</p>
+                    </div>
+                    
+                    <div class="dialogue adam">
+                        <div class="speaker">👨 아담의 변명</div>
+                        <p><strong>"하나님께서... 주신 그 여자가"</strong></p>
+                        <p>• 책임 전가 (하와에게)</p>
+                        <p>• 은근한 하나님 원망 ("주신 그 여자")</p>
+                        <p>• 자신의 책임 부인</p>
+                    </div>
+                    
+                    <div class="dialogue eve">
+                        <div class="speaker">👩 하와의 변명</div>
+                        <p><strong>"뱀이 저를 꾀어서"</strong></p>
+                        <p>• 뱀에게 책임 전가</p>
+                        <p>• 자신의 선택 부인</p>
+                        <p>• 피해자 의식</p>
+                    </div>
+                </div>
+                
+                <p><strong>핵심 의미:</strong> 죄는 관계를 파괴합니다. 하나님과의 관계(숨음), 부부 관계(서로 탓함), 자기 자신과의 관계(수치심)가 모두 깨어졌습니다.</p>
+            </div>
+        </div>
+
+        <!-- 하나님의 심판 선고 -->
+        <div class="story-section">
+            <div class="section-title">
+                <div class="section-number">6</div>
+                하나님의 심판 선고
+            </div>
+            <div class="story-content">
+                <div class="verse-block">
+                    <span class="verse-number">창3:14-19</span>
+                    여호와 하나님께서 뱀에게 말씀하셨습니다. "네가 이 일을 저질렀으니 너는 모든 가축과 모든 들짐승보다 더 저주를 받을 것이다. 배로 기어 다니고 네가 사는 평생 동안 흙을 먹을 것이다. 내가 너와 여자 사이에, 네 자손과 여자의 자손 사이에 증오심을 두리니 여자의 자손이 네 머리를 상하게 하고 너는 그의 발뒤꿈치를 상하게 할 것이다." 여자에게 하나님께서 말씀하셨습니다. "내가 네게 임신의 수고로움을 크게 더할 것이니 네가 괴로움 속에서 자식을 낳을 것이다. 너는 남편을 지배하려 하나 그가 너를 다스릴 것이다." 아담에게 하나님께서 말씀하셨습니다. "네가 네 아내의 말을 듣고 내가 네게 명령해 '먹지 마라'고 말한 나무의 열매를 먹었으니 너 때문에 땅이 저주를 받을 것이다. 네가 일평생 수고해야 땅에서 나는 것을 먹을 것이다. 땅은 네게 가시덤불과 엉겅퀴를 내고 너는 밭의 식물을 먹을 것이다. 네가 흙에서 취해졌으니 흙으로 돌아갈 때까지 네 얼굴에 땀이 흘러야 네가 음식을 먹을 것이다. 너는 흙이니 흙으로 돌아갈 것이다."
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div style="background: #8e44ad; color: white; padding: 20px; border-radius: 10px;">
+                        <h4 style="margin-bottom: 15px;">🐍 뱀에 대한 심판</h4>
+                        <p>• 배로 기어 다님</p>
+                        <p>• 평생 흙을 먹음</p>
+                        <p>• 여자의 후손과 원수됨</p>
+                        <p>• 머리가 상함 (치명적 타격)</p>
+                    </div>
+                    <div style="background: #e91e63; color: white; padding: 20px; border-radius: 10px;">
+                        <h4 style="margin-bottom: 15px;">👩 여자에 대한 심판</h4>
+                        <p>• 해산의 고통 가중</p>
+                        <p>• 남편과의 관계 갈등</p>
+                        <p>• 지배하려 하나 다스림 받음</p>
+                        <p>• 모성의 어려움</p>
+                    </div>
+                    <div style="background: #3498db; color: white; padding: 20px; border-radius: 10px;">
+                        <h4 style="margin-bottom: 15px;">👨 남자에 대한 심판</h4>
+                        <p>• 땅이 저주받음</p>
+                        <p>• 노동의 고통 (가시덤불, 엉겅퀴)</p>
+                        <p>• 얼굴에 땀 흘리며 수고</p>
+                        <p>• 육체적 죽음 (흙으로 돌아감)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 원복음 -->
+        <div class="hope-message">
+            <div class="hope-title">원복음 (Protoevangelium) - 창세기 3:15</div>
+            <div style="background: rgba(39, 174, 96, 0.1); padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #27ae60;">
+                <h4 style="color: #27ae60; margin-bottom: 10px;">🌟 인류 역사상 첫 번째 복음</h4>
+                <p style="font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #2c3e50;">
+                    "내가 너와 여자 사이에, 네 자손과 여자의 자손 사이에 증오심을 두리니 여자의 자손이 네 머리를 상하게 하고 너는 그의 발뒤꿈치를 상하게 할 것이다."
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <div>
+                        <h5 style="color: #27ae60;">💚 약속의 내용</h5>
+                        <p>• 여자의 후손이 승리할 것</p>
+                        <p>• 뱀(사탄)의 머리를 상함</p>
+                        <p>• 구원자의 오심을 예고</p>
+                    </div>
+                    <div>
+                        <h5 style="color: #27ae60;">✨ 신약에서의 성취</h5>
+                        <p>• 예수 그리스도의 오심</p>
+                        <p>• 십자가를 통한 승리</p>
+                        <p>• 사탄 권세의 완전한 파멸</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하나님의 긍휼 -->
+        <div class="story-section">
+            <div class="section-title">
+                <div class="section-number">7</div>
+                심판 중에 나타난 하나님의 긍휼
+            </div>
+            <div class="story-content">
+                <div class="verse-block">
+                    <span class="verse-number">창3:20-21</span>
+                    아담이 그의 아내를 하와라고 불렀는데 이는 그녀가 살아 있는 모든 사람들의 어머니이기 때문입니다. 여호와 하나님께서 아담과 그 아내를 위해 가죽옷을 만들어 입히셨습니다.
+                </div>
+                
+                <div style="background: #d4edda; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #27ae60;">
+                    <h4 style="color: #27ae60; margin-bottom: 15px;">💝 하나님의 긍휼의 증거들</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div>
+                            <h5 style="color: #27ae60;">👗 가죽옷</h5>
+                            <p>• 무화과나무 잎보다 든든함</p>
+                            <p>• 하나님이 직접 만드심</p>
+                            <p>• 수치를 가려주심</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #27ae60;">🔍 찾아오심</h5>
+                            <p>• "네가 어디 있느냐?"</p>
+                            <p>• 숨은 자를 찾으심</p>
+                            <p>• 관계 회복 시도</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #27ae60;">👶 생명의 보장</h5>
+                            <p>• 즉시 죽이지 않으심</p>
+                            <p>• 후손의 약속</p>
+                            <p>• 구원의 소망</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p><strong>핵심 의미:</strong> 하나님은 심판자이시지만 동시에 긍휼이 풍성하신 분입니다. 가죽옷은 하나님의 사랑과 보호하심을 보여주는 첫 번째 구체적 행동입니다.</p>
+            </div>
+        </div>
+
+        <!-- 에덴에서의 추방 -->
+        <div class="story-section">
+            <div class="section-title">
+                <div class="section-number">8</div>
+                에덴동산에서의 추방
+            </div>
+            <div class="story-content">
+                <div class="verse-block">
+                    <span class="verse-number">창3:22-24</span>
+                    여호와 하나님께서 말씀하셨습니다. "이 사람이 우리 가운데 하나같이 돼 선악을 알게 됐으니 이제 그가 손을 뻗어 생명나무 열매까지 따먹고 영원히 살게 되면 안 될 것이다." 여호와 하나님께서 그를 에덴 동산에서 내보내 그가 취해진 땅을 일구게 하셨습니다. 하나님께서 그 사람을 쫓아내시고 에덴 동산 동쪽에 그룹들과 회전하는 칼의 불꽃을 둬 생명나무로 가는 길을 지키게 하셨습니다.
+                </div>
+                
+                <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #ffc107;">
+                    <h4 style="color: #e67e22; margin-bottom: 15px;">🚪 추방의 이유와 의미</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                        <div>
+                            <h5 style="color: #d35400;">⚠️ 추방의 이유</h5>
+                            <p>• 생명나무 열매를 먹을 위험</p>
+                            <p>• 죄인이 영원히 사는 것의 문제</p>
+                            <p>• 완전한 타락의 방지</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #d35400;">👼 그룹과 불꽃검</h5>
+                            <p>• 하나님의 거룩함 보호</p>
+                            <p>• 생명나무 접근 차단</p>
+                            <p>• 장차 올 구원의 때까지</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #d35400;">💡 긍휼의 측면</h5>
+                            <p>• 영원한 고통 방지</p>
+                            <p>• 구원의 기회 보장</p>
+                            <p>• 새로운 시작의 기회</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p><strong>핵심 의미:</strong> 추방은 심판이지만 동시에 긍휼입니다. 죄인이 영원히 사는 것보다 죽음을 통해 구원의 기회를 갖는 것이 더 나은 하나님의 배려입니다.</p>
+            </div>
+        </div>
+
+        <!-- 주요 캐릭터들 -->
+        <div class="character-profile eve">
+            <div class="character-name">👩 하와 (Eve)</div>
+            <div class="character-details">
+                <div class="detail-item">
+                    <strong>유혹받은 과정</strong><br>
+                    말씀 변경 → 의심 → 탐욕 → 범죄
+                </div>
+                <div class="detail-item">
+                    <strong>3단계 유혹</strong><br>
+                    육신의 정욕, 안목의 정욕, 이생의 자랑
+                </div>
+                <div class="detail-item">
+                    <strong>범죄 후 변화</strong><br>
+                    수치심, 두려움, 책임 전가
+                </div>
+                <div class="detail-item">
+                    <strong>심판</strong><br>
+                    해산의 고통, 관계의 갈등
+                </div>
+                <div class="detail-item">
+                    <strong>이름의 의미</strong><br>
+                    "살아 있는 모든 자의 어머니"
+                </div>
+                <div class="detail-item">
+                    <strong>소망</strong><br>
+                    여자의 후손을 통한 구원 약속
+                </div>
+            </div>
+        </div>
+
+        <div class="character-profile adam">
+            <div class="character-name">👨 아담 (Adam)</div>
+            <div class="character-details">
+                <div class="detail-item">
+                    <strong>범죄의 특징</strong><br>
+                    소극적 범죄 - 아내의 말을 들음
+                </div>
+                <div class="detail-item">
+                    <strong>책임 회피</strong><br>
+                    하와와 은근히 하나님께 책임 전가
+                </div>
+                <div class="detail-item">
+                    <strong>리더십 실패</strong><br>
+                    아내를 보호하고 인도하지 못함
+                </div>
+                <div class="detail-item">
+                    <strong>심판</strong><br>
+                    땅의 저주, 노동의 고통, 죽음
+                </div>
+                <div class="detail-item">
+                    <strong>명명권 행사</strong><br>
+                    아내를 "하와"라고 명명
+                </div>
+                <div class="detail-item">
+                    <strong>대표성</strong><br>
+                    인류의 대표로서 원죄 전달
+                </div>
+            </div>
+        </div>
+
+        <div class="character-profile god">
+            <div class="character-name">⚖️ 여호와 하나님</div>
+            <div class="character-details">
+                <div class="detail-item">
+                    <strong>공의로운 심판관</strong><br>
+                    죄에 대해 반드시 심판하시는 분
+                </div>
+                <div class="detail-item">
+                    <strong>긍휼이 풍성한 분</strong><br>
+                    찾아오시고, 옷 입히시고, 약속하심
+                </div>
+                <div class="detail-item">
+                    <strong>구원을 계획하신 분</strong><br>
+                    원복음을 통한 구원의 길 제시
+                </div>
+                <div class="detail-item">
+                    <strong>관계를 원하시는 분</strong><br>
+                    "네가 어디 있느냐?" - 끝까지 찾으심
+                </div>
+                <div class="detail-item">
+                    <strong>거룩하신 분</strong><br>
+                    죄를 용납하지 않으시는 완전한 거룩
+                </div>
+                <div class="detail-item">
+                    <strong>지혜로우신 분</strong><br>
+                    심판 중에도 구원의 길을 여심
+                </div>
+            </div>
+        </div>
+
+        <!-- 심판과 긍휼 비교 -->
+        <div class="comparison-section">
+            <div class="comparison-title">⚖️ 하나님의 심판 vs 하나님의 긍휼</div>
+            <div class="comparison-grid">
+                <div class="compare-item">
+                    <h4>심판의 측면</h4>
+                    <p>• 뱀에게 저주</p>
+                    <p>• 여자에게 해산의 고통</p>
+                    <p>• 남자에게 노동의 고통</p>
+                    <p>• 에덴에서 추방</p>
+                    <p>• 죽음의 시작</p>
+                </div>
+                <div class="vs-divider">&</div>
+                <div class="compare-item">
+                    <h4>긍휼의 측면</h4>
+                    <p>• 즉시 죽이지 않으심</p>
+                    <p>• 원복음 약속</p>
+                    <p>• 가죽옷으로 덮어주심</p>
+                    <p>• 생명나무 보호 (영원한 고통 방지)</p>
+                    <p>• 구원의 기회 제공</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 경고 메시지 -->
+        <div class="warning-message">
+            <div class="warning-title">죄의 파괴적 결과</div>
+            <p><strong>관계의 파괴:</strong> 하나님과의 관계, 부부 관계, 자연과의 관계 모두 깨어짐</p>
+            <p><strong>책임 회피:</strong> 자신의 잘못을 인정하지 않고 다른 사람에게 전가</p>
+            <p><strong>수치와 두려움:</strong> 하나님 앞에서 숨고 싶어하는 마음</p>
+            <p><strong>노동의 고통:</strong> 일이 기쁨이 아닌 고통이 됨</p>
+            <p><strong>죽음의 시작:</strong> 영적 죽음이 육체적 죽음으로 이어짐</p>
+        </div>
+
+        <!-- 메시지 박스 -->
+        <div class="message-box">
+            <div class="message-title">창세기 3장의 핵심 메시지</div>
+            <p><strong>1. 죄의 기원:</strong> 하나님의 말씀에 대한 의심과 불순종에서 시작</p>
+            <p><strong>2. 유혹의 패턴:</strong> 의심 심기 → 말씀 왜곡 → 거짓 약속 → 교만 자극</p>
+            <p><strong>3. 죄의 결과:</strong> 관계 파괴, 고통, 죽음의 시작</p>
+            <p><strong>4. 하나님의 공의:</strong> 죄에 대한 심판은 반드시 있음</p>
+            <p><strong>5. 하나님의 긍휼:</strong> 심판 중에도 구원의 길을 예비하심</p>
+            <p><strong>6. 원복음의 약속:</strong> 여자의 후손을 통한 궁극적 승리</p>
+        </div>
+
+        <!-- 범례 -->
+        <div class="legend">
+            <h3>📚 색상 범례</h3>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #8B4513, #CD853F);"></div>
+                    <span>구약 테마 및 일반 캐릭터</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #8e44ad, #2c3e50);"></div>
+                    <span>뱀 (사탄) 관련</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f3e5f5;"></div>
+                    <span>뱀의 대화</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fce4ec;"></div>
+                    <span>하와의 대화</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e8f4fd;"></div>
+                    <span>아담의 대화</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fff3cd;"></div>
+                    <span>하나님의 대화</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #d4edda;"></div>
+                    <span>희망과 긍휼의 메시지</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fdedec;"></div>
+                    <span>경고와 심판 메시지</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #e74c3c, #c0392b);"></div>
+                    <span>타락 과정 타임라인</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

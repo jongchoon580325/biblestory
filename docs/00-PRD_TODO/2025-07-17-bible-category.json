@@ -1,0 +1,482 @@
+[
+  {
+    "id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+    "name": "구약",
+    "parent_id": null,
+    "order": 1,
+    "created_at": "2025-07-15T07:18:00.391486+00:00",
+    "books": [
+      {
+        "id": "27c66e0f-ef23-4b70-9048-f4225381880a",
+        "name": "창세기",
+        "order": 1,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "00321118-8d45-4758-91b8-1dec4f0635e7",
+        "name": "출애굽기",
+        "order": 2,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "f82bf24d-bb0e-4ba3-b135-88ead7134fa9",
+        "name": "레위기",
+        "order": 3,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "9863b1b3-35a0-41da-961f-90259948e914",
+        "name": "민수기",
+        "order": 4,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "6bfebf0e-e4f9-4810-bc46-a40c9f439fa6",
+        "name": "신명기",
+        "order": 5,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "21b38b22-f854-4cd1-8bae-8b6ba97a2aed",
+        "name": "여호수아",
+        "order": 6,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "d7d98f21-7023-4a31-b379-5f57a6c65fd3",
+        "name": "사사기",
+        "order": 7,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "665b8fb8-9ead-478a-82cb-5bc39ab46019",
+        "name": "룻기",
+        "order": 8,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "a7a3b244-c635-4da6-8681-bdc37fee7dff",
+        "name": "사무엘상",
+        "order": 9,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "736fb045-9274-4fe6-acc3-7febd3fbdf85",
+        "name": "사무엘하",
+        "order": 10,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "73973ecf-6d8e-45b3-92b8-651f91b1783f",
+        "name": "열왕기상",
+        "order": 11,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "4f7af71d-4fb7-462b-a1f4-00224b258e68",
+        "name": "열왕기하",
+        "order": 12,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "6dc5a7ba-1565-4855-b5ef-2e70535dcfea",
+        "name": "역대상",
+        "order": 13,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "c442d225-146a-4877-abe7-5144c67b0679",
+        "name": "역대하",
+        "order": 14,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "35d38d32-e82d-405f-8e88-cc62c209266a",
+        "name": "에스라",
+        "order": 15,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "d58ec52e-fd3f-418c-ab8f-a8011cc43512",
+        "name": "느헤미야",
+        "order": 16,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "d8f9a73f-e8e4-419d-a11b-34013ef2759c",
+        "name": "에스더",
+        "order": 17,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "706aaf6f-2a82-4f90-9a9f-f6e04348e6f6",
+        "name": "욥기",
+        "order": 18,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "050ba382-abea-4f0a-92d2-88ca1b0f8d8b",
+        "name": "시편",
+        "order": 19,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "22a3d64f-c715-421a-89ca-d774d5565441",
+        "name": "잠언",
+        "order": 20,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "19c830ee-9623-41b8-9312-4da49ec88a11",
+        "name": "전도서",
+        "order": 21,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "15e884d2-c944-480a-811e-aecb3a74fcab",
+        "name": "아가",
+        "order": 22,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "4b2419bc-de7c-433e-886d-a486cdcbfa8d",
+        "name": "이사야",
+        "order": 23,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "98eb7f10-9317-41c7-b56f-36b993e8efcf",
+        "name": "예레미야",
+        "order": 24,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "bb499869-cc35-4101-bd48-49f95a42b849",
+        "name": "예레미야애가",
+        "order": 25,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "55fb1bef-f2c1-4d72-8ab3-b4a55682471d",
+        "name": "에스겔",
+        "order": 26,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "624a99ed-f478-46ad-87d0-f06b962e26a4",
+        "name": "다니엘",
+        "order": 27,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "a080fb4c-a340-4d8e-8e2d-b4bfea05f5b0",
+        "name": "호세아",
+        "order": 28,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "b243c03d-30f6-4084-9187-e818e5802ce7",
+        "name": "요엘",
+        "order": 29,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "1cb8d8ed-e955-44ec-bd2a-964903d219d5",
+        "name": "아모스",
+        "order": 30,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "43d79437-3fdc-4334-a2ca-d2e604700a31",
+        "name": "오바댜",
+        "order": 31,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "d43d6867-dea4-4150-949f-11d4ea7577ee",
+        "name": "요나",
+        "order": 32,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "2da1b5b7-6be3-44c9-84a2-32316bdac09c",
+        "name": "미가",
+        "order": 33,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "09418f8d-0309-4e6b-a34b-3aa060dc60a6",
+        "name": "나훔",
+        "order": 34,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "c5e4392e-1811-4e36-adcd-0ba356c29633",
+        "name": "하박국",
+        "order": 35,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "5b9ae8f5-e9c0-4701-9294-b649ac400131",
+        "name": "스바냐",
+        "order": 36,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "32c6eb0c-e01d-4e77-a28f-271226a024b9",
+        "name": "학개",
+        "order": 37,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "9943d544-6b17-46cb-ac21-09b91f9b0d4a",
+        "name": "스가랴",
+        "order": 38,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      },
+      {
+        "id": "f16e8956-028e-4ce6-934e-a1de18fecfa1",
+        "name": "말라기",
+        "order": 39,
+        "parent_id": "609528b7-a6b1-4112-97e3-c89ba34e5b2c",
+        "created_at": "2025-07-15T07:28:06.631425+00:00"
+      }
+    ]
+  },
+  {
+    "id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+    "name": "신약",
+    "parent_id": null,
+    "order": 2,
+    "created_at": "2025-07-15T07:18:00.391486+00:00",
+    "books": [
+      {
+        "id": "a6e522c9-5fc0-44bc-9c03-f8c0e0d83215",
+        "name": "마태복음",
+        "order": 1,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "fc4735e6-9245-4cc1-8d33-100f90afad3c",
+        "name": "마가복음",
+        "order": 2,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "2031ccc0-bbc7-404c-9cab-fd22895e7b06",
+        "name": "누가복음",
+        "order": 3,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "868e0aa1-c29f-4647-936b-39828e8ddb01",
+        "name": "요한복음",
+        "order": 4,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "7607a27e-0c35-42a1-a19c-fe552376018e",
+        "name": "사도행전",
+        "order": 5,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "da3ccb46-1f67-4f6c-949d-f1ebd693a078",
+        "name": "로마서",
+        "order": 6,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "d27a5a60-f141-4511-82ac-33b8d70dae7b",
+        "name": "고린도전서",
+        "order": 7,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "d412ba54-774e-4029-890b-0acc6fea2967",
+        "name": "고린도후서",
+        "order": 8,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "693b3bbf-95df-4df5-9211-92ade0c48753",
+        "name": "갈라디아서",
+        "order": 9,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "6f8249c4-ca60-4223-8acf-2625a2110a26",
+        "name": "에베소서",
+        "order": 10,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "72c616cb-48d7-428b-b3e6-77f828368337",
+        "name": "빌립보서",
+        "order": 11,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "ec25242e-1ad6-4ef9-85ba-1dc635528845",
+        "name": "골로새서",
+        "order": 12,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "7e83e0e0-23f9-4e78-8312-ac6ed4fb8eb4",
+        "name": "데살로니가전서",
+        "order": 13,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "622db0f2-371a-45fb-9096-cbc4210c04a6",
+        "name": "데살로니가후서",
+        "order": 14,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "5e863f11-e393-4ea9-94d8-380bb4bda5c4",
+        "name": "디모데전서",
+        "order": 15,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "54baaa90-cf90-43f3-9c6d-c63b5ea91062",
+        "name": "디모데후서",
+        "order": 16,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "ef78a742-de5f-4dca-b0d6-04ab09158411",
+        "name": "디도서",
+        "order": 17,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "07f06cb3-e299-4cf4-9ee5-b9ed27d28b35",
+        "name": "빌레몬서",
+        "order": 18,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "833a10bf-59d8-4c2c-84fc-77c59f06f62e",
+        "name": "히브리서",
+        "order": 19,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "9f513458-03d8-4182-8ff4-ce116dfa987b",
+        "name": "야고보서",
+        "order": 20,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "67f0ddaa-6f9a-467d-8774-0c540cf17872",
+        "name": "베드로전서",
+        "order": 21,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "9f516743-1bb8-44ab-8fae-51c31e9f38ad",
+        "name": "베드로후서",
+        "order": 22,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "e2af3528-09fa-43ce-86c1-bec066516e4d",
+        "name": "요한일서",
+        "order": 23,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "01dd8cfc-1159-4ea4-8d33-7ee4067b1bca",
+        "name": "요한이서",
+        "order": 24,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "0e79d30a-88d7-4c85-b7d0-b96a2517a6f4",
+        "name": "요한삼서",
+        "order": 25,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "adcc75de-d7aa-455f-91d9-27178d89c1a5",
+        "name": "유다서",
+        "order": 26,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      },
+      {
+        "id": "02a7a567-2cdf-4bae-bfd6-db1b94e266aa",
+        "name": "요한계시록",
+        "order": 27,
+        "parent_id": "0fed4fb2-21ce-4972-bbcb-bfad7d541e08",
+        "created_at": "2025-07-15T09:56:26.124637+00:00"
+      }
+    ]
+  }
+]
