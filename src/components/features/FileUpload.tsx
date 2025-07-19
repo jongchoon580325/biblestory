@@ -358,7 +358,7 @@ export default function FileUpload({ onUploadComplete }: { onUploadComplete?: (r
   const validateAndSetFiles = (selectedFiles: File[]) => {
     const validFiles: File[] = [];
     const invalidFiles: { file: File; error: string }[] = [];
-    
+
     selectedFiles.forEach(file => {
       const validation = validateFileName(file.name);
       if (validation.isValid) {
@@ -458,10 +458,10 @@ export default function FileUpload({ onUploadComplete }: { onUploadComplete?: (r
         fileMetadata = await createMaterialMetadata(files);
       } catch (error) {
         showToast(`메타데이터 생성 실패: ${error instanceof Error ? error.message : '알 수 없는 오류'}`, 'error');
-        setUploading(false);
+      setUploading(false);
         setUploadProgress({ current: 0, total: 0 });
-        return;
-      }
+      return;
+    }
       
       // Storage 병렬 업로드
       setUploadProgress({ current: 0, total: files.length });
@@ -557,7 +557,7 @@ export default function FileUpload({ onUploadComplete }: { onUploadComplete?: (r
       }));
       
       setUploadResults(finalResults);
-      setUploading(false);
+    setUploading(false);
       showToast(`업로드 완료! ${finalResults.length}개 파일이 성공적으로 저장되었습니다.`, 'success');
       
       // 상태 초기화 (3초 후)
@@ -610,7 +610,7 @@ export default function FileUpload({ onUploadComplete }: { onUploadComplete?: (r
             ? 'border-blue-300 bg-slate-700/50 scale-105' 
             : 'border-blue-400 bg-slate-900 hover:bg-slate-800'
         }`}
-        onDrop={handleDrop}
+           onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onClick={() => fileInputRef.current?.click()}

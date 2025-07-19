@@ -38,6 +38,10 @@ export default function BookTablePage() {
   const [downloadFileName, setDownloadFileName] = useState<string | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
+  
+  // 페이지네이션 상태 추가
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,6 +67,8 @@ export default function BookTablePage() {
         setData([]);
       } else {
         setData(rows || []);
+        // 데이터 로드 시 첫 페이지로 리셋
+        setCurrentPage(1);
       }
       setLoading(false);
     };
@@ -86,6 +92,25 @@ export default function BookTablePage() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // 페이지네이션 계산
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = data.slice(startIndex, endIndex);
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // 페이지 변경 시 상단으로 스크롤
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // 항목 수 변경 핸들러
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1); // 첫 페이지로 리셋
+  };
 
   return (
     <div className="min-h-screen bg-slate-900" style={{ backgroundColor: '#292828' }}>
@@ -130,7 +155,7 @@ export default function BookTablePage() {
                 <tr><td colSpan={6} className="text-center py-8 text-red-500">{error}</td></tr>
               ) : data.length === 0 ? (
                 <tr><td colSpan={6} className="text-center py-8 text-slate-400">데이터가 없습니다.</td></tr>
-              ) : data.map((row) => (
+              ) : currentData.map((row) => (
                 <tr key={row.id} className="border-t border-slate-700 hover:bg-slate-700/20">
                   {/* 책명: 라우트 파라미터 사용 */}
                   <td className="px-4 py-2 font-semibold">{bookName}</td>
@@ -280,16 +305,74 @@ export default function BookTablePage() {
             </tbody>
           </table>
         </div>
-        {/* 페이지네이션/항목보기(목업) */}
+        {/* 페이지네이션/항목보기 */}
         <div className="flex items-center justify-between mt-6">
-          <div className="flex-1" />
-          <div className="flex items-center space-x-2">
-            <span className="text-slate-400">항목보기:</span>
-            <select className="bg-slate-800 text-white border border-slate-700 rounded px-2 py-1">
-              <option>10개</option>
-              <option>20개</option>
-              <option>30개</option>
-            </select>
+          {/* 전체 데이터 수 표시 */}
+          <div className="text-slate-400 text-sm">
+            총 {data.length}개 항목 중 {startIndex + 1}-{Math.min(endIndex, data.length)}개 표시
+          </div>
+          
+          {/* 페이지네이션 컨트롤 */}
+          <div className="flex items-center space-x-4">
+            {/* 페이지 번호 네비게이션 */}
+            {totalPages > 1 && (
+              <div className="flex items-center space-x-2">
+                {/* 이전 페이지 버튼 */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                    currentPage === 1
+                      ? 'text-slate-500 cursor-not-allowed'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-700'
+                  }`}
+                >
+                  이전
+                </button>
+                
+                {/* 페이지 번호들 */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                      currentPage === page
+                        ? 'bg-blue-500 text-white'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-700'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                
+                {/* 다음 페이지 버튼 */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                    currentPage === totalPages
+                      ? 'text-slate-500 cursor-not-allowed'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-700'
+                  }`}
+                >
+                  다음
+                </button>
+              </div>
+            )}
+            
+            {/* 항목보기 선택 */}
+            <div className="flex items-center space-x-2">
+              <span className="text-slate-400 text-sm">항목보기:</span>
+              <select 
+                value={itemsPerPage}
+                onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
+                className="bg-slate-800 text-white border border-slate-700 rounded px-2 py-1 text-sm"
+              >
+                <option value={10}>10개</option>
+                <option value={20}>20개</option>
+                <option value={30}>30개</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
