@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Eye, Download, Edit, Trash2, Search, ChevronLeft, Check, X as XIcon } from "lucide-react";
+import { Eye, Download, Edit, Trash2, Search, ChevronLeft, Check, X as XIcon, ArrowUp } from "lucide-react";
 import { useParams } from "next/navigation";
 import HtmlPreviewModal from "@/components/features/HtmlPreviewModal";
 import { supabase } from "@/utils/supabaseClient";
@@ -37,6 +37,7 @@ export default function BookTablePage() {
   const [downloadPath, setDownloadPath] = useState<string | null>(null);
   const [downloadFileName, setDownloadFileName] = useState<string | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,7 +56,7 @@ export default function BookTablePage() {
       const { data: rows, error } = await supabase
         .from('b_materials')
         .select('id, chapter, file_name, storage_path')
-        .ilike('file_name', `00-${bookInfo.englishName}-%`) // 해당 책의 파일만 필터링
+        .ilike('file_name', `%-${bookInfo.englishName}-%`) // 해당 책의 파일만 필터링 (접두사 무관)
         .order('chapter', { ascending: true });
       if (error) {
         setError(error.message);
@@ -75,6 +76,16 @@ export default function BookTablePage() {
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   }, [modalOpen]);
+
+  // 스크롤 감지 - 위로가기 버튼 표시/숨김
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollToTop(window.scrollY > 200);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-900" style={{ backgroundColor: '#292828' }}>
@@ -281,8 +292,18 @@ export default function BookTablePage() {
             </select>
           </div>
         </div>
-        {/* 위로가기(플로팅) 버튼 자리 */}
       </div>
+      
+      {/* 위로가기 버튼 */}
+      {showScrollToTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-8 right-8 z-50 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+          title="위로가기"
+        >
+          <ArrowUp className="w-6 h-6" />
+        </button>
+      )}
       {/* HtmlPreviewModal은 이제 전체화면 오버레이로만 동작하므로, 별도 중앙정렬/여백/스크롤 props/스타일 불필요 */}
       <HtmlPreviewModal
         open={modalOpen}
