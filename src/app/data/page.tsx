@@ -1,7 +1,7 @@
   'use client';
   import React, { useEffect, useState } from 'react';
   import Link from 'next/link';
-  import { Database, Book, Heart, Mail, Globe, ArrowUpCircle, ArrowDownCircle, RotateCcw, ListTree, Lock, Key } from 'lucide-react';
+  import { Database, Book, Heart, Mail, Globe, ArrowUpCircle, ArrowDownCircle, RotateCcw, ListTree, Lock, Key, BookOpen } from 'lucide-react';
   import FileUpload from '@/components/features/FileUpload';
   import { ExportDataButton } from '@/components/features/ExportDataButton';
   import { ExportCategoryButton } from '@/components/features/ExportCategoryButton';
@@ -10,6 +10,7 @@
   import { ImportDataButton } from '@/components/features/ImportDataButton';
   import { ImportCategoryButton } from '@/components/features/ImportCategoryButton';
   import CategoryForm from '@/components/features/CategoryForm';
+  import BibleReadingUpload from '@/components/features/BibleReadingUpload';
   import { supabase } from '@/utils/supabaseClient';
   import JSZip from 'jszip';
   // Category 타입 정의 (CategoryForm.tsx와 동일)
@@ -29,7 +30,6 @@
   };
 
   import ScrollToTopButton from '@/components/features/ScrollToTopButton';
-
   // Supabase Storage 파일/폴더 타입 정의
   // SupabaseStorageFile 타입 선언 제거
 
@@ -396,6 +396,7 @@
                 </div>
                 <div className="flex items-center space-x-1">
                   <Link href="/" className="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50">HOME</Link>
+                  <Link href="/read" className="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50">READ</Link>
                   <Link href="/data" className="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-blue-400 border border-blue-500/30 bg-blue-500/20">DATA</Link>
                 </div>
               </div>
@@ -461,6 +462,7 @@
               </div>
               <div className="flex items-center space-x-1">
                 <Link href="/" className="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50">HOME</Link>
+                <Link href="/read" className="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50">READ</Link>
                 <Link href="/data" className="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-blue-400 border border-blue-500/30 bg-blue-500/20">DATA</Link>
               </div>
             </div>
@@ -468,12 +470,15 @@
         </nav>
         <main className="max-w-6xl mx-auto px-6 py-8 relative">
           <div className="space-y-8">
-            <div className="text-center space-y-4">
-              <div className="flex items-center justify-center space-x-3">
-                <Database className="w-8 h-8 text-slate-400 mb-0" />
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400 bg-clip-text text-transparent m-0">
+            {/* 스티키 헤더 섹션 */}
+            <div className="sticky top-0 z-20 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50 -mx-6 px-6 py-4">
+              <div className="text-center space-y-4">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
                   자료 관리
                 </h1>
+                <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+                  소중한 자료를 관리하는 공간입니다.
+                </p>
               </div>
             </div>
             {/* 콘텐츠 2단 그리드: 좌/우 5:5 동일 분할 */}
@@ -490,6 +495,13 @@
                   카테고리 관리
                 </div>
                 <CategoryForm categories={categories} />
+                
+                {/* 성경읽기 자료 등록 */}
+                <div className="flex items-center text-xl font-bold text-white mb-2">
+                  <BookOpen className="w-6 h-6 mr-2 text-purple-400" />
+                  성경읽기 자료 등록
+                </div>
+                <BibleReadingUpload />
               </div>
               {/* 우측: 데이터 관리 버튼 그리드 (50%) */}
               <div className="flex-[0_0_50%] basis-1/2 flex flex-col space-y-8 self-start w-full">

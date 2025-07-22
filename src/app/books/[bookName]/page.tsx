@@ -117,9 +117,13 @@ export default function BookTablePage() {
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* 상단 네비게이션 */}
         <div className="flex items-center justify-between mb-6">
-          <Link href="/" className="flex items-center text-blue-400 hover:underline">
-            <ChevronLeft className="w-5 h-5 mr-1" /> HOME
-          </Link>
+          <div className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center text-blue-400 hover:underline">
+              <ChevronLeft className="w-5 h-5 mr-1" /> HOME
+            </Link>
+            <span className="text-slate-400">/</span>
+            <Link href="/read" className="text-slate-400 hover:text-white">READ</Link>
+          </div>
           <h2 ref={titleRef} className="text-2xl font-bold text-white">{bookName} 테이블 리스트</h2>
         </div>
         {/* 검색 필드 */}

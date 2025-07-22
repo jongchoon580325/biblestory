@@ -1,58 +1,9 @@
-hot-reloader-client.js:197 [Fast Refresh] rebuilding
-page.tsx:54 Supabase 연결 성공
-report-hmr-latency.js:14 [Fast Refresh] done in 114ms
-hot-reloader-client.js:197 [Fast Refresh] rebuilding
-report-hmr-latency.js:14 [Fast Refresh] done in 267ms
 supabaseClient.ts:3 SUPABASE_URL: https://gqfryirmszmxpgczhgcp.supabase.co
 supabaseClient.ts:4 SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxZnJ5aXJtc3pteHBnY3poZ2NwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwNjQzNjksImV4cCI6MjA2NjY0MDM2OX0.lIgXaxc7dKyKoMlEzQkFbttpNUb2rDaUfcF1H21dxlE
-supabaseClient.ts:9 Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+gqfryirmszmxpgczhgcp.supabase.co/rest/v1/category?select=*&is_active=eq.true&order=order.asc:1  Failed to load resource: the server responded with a status of 400 ()
+hook.js:608 카테고리 조회 오류: Object
 overrideMethod @ hook.js:608
-GoTrueClient @ GoTrueClient.js:71
-SupabaseAuthClient @ SupabaseAuthClient.js:9
-_initSupabaseAuthClient @ SupabaseClient.js:203
-SupabaseClient @ SupabaseClient.js:75
-createClient @ index.js:62
-eval @ supabaseClient.ts:9
-(app-pages-browser)/./src/utils/supabaseClient.ts @ page.js:1061
-options.factory @ webpack.js?v=1752572739684:712
-__webpack_require__ @ webpack.js?v=1752572739684:37
-fn @ webpack.js?v=1752572739684:369
-eval @ CategoryForm.tsx:17
-(app-pages-browser)/./src/components/features/CategoryForm.tsx @ page.js:973
-options.factory @ webpack.js?v=1752572739684:712
-__webpack_require__ @ webpack.js?v=1752572739684:37
-fn @ webpack.js?v=1752572739684:369
-eval @ page.tsx:22
-(app-pages-browser)/./src/app/data/page.tsx @ page.js:962
-options.factory @ webpack.js?v=1752572739684:712
-__webpack_require__ @ webpack.js?v=1752572739684:37
-fn @ webpack.js?v=1752572739684:369
-Promise.then
-eval @ next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22%2FUsers%2Fjongchoonna%2FDocuments%2Fcursor%2Fbible%2F03%2F01-bible-basic%2Fsrc%2Fapp%2Fdata%2Fpage.tsx%22%2C%22ids%22%3A%5B%5D%7D&server=false!:1
-(app-pages-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22%2FUsers%2Fjongchoonna%2FDocuments%2Fcursor%2Fbible%2F03%2F01-bible-basic%2Fsrc%2Fapp%2Fdata%2Fpage.tsx%22%2C%22ids%22%3A%5B%5D%7D&server=false! @ page.js:831
-options.factory @ webpack.js?v=1752572739684:712
-__webpack_require__ @ webpack.js?v=1752572739684:37
-__webpack_exec__ @ page.js:1067
-(익명) @ page.js:1068
-__webpack_require__.O @ webpack.js?v=1752572739684:84
-(익명) @ page.js:1069
-webpackJsonpCallback @ webpack.js?v=1752572739684:1388
-(익명) @ page.js:9
-page.tsx:113 CategoryForm categories: []
-page.tsx:113 CategoryForm categories: []
-CategoryForm.tsx:127 CategoryForm received: []
-CategoryForm.tsx:127 CategoryForm received: []
-page.tsx:50 groups: (2) [{…}, {…}] error: null
-page.tsx:50 groups: (2) [{…}, {…}] error: null
-page.tsx:58 allBooks: (39) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-page.tsx:70 withBooks: (2) [{…}, {…}]
-page.tsx:113 CategoryForm categories: (2) [{…}, {…}]
-page.tsx:113 CategoryForm categories: (2) [{…}, {…}]
-CategoryForm.tsx:127 CategoryForm received: (2) [{…}, {…}]
-CategoryForm.tsx:127 CategoryForm received: (2) [{…}, {…}]
-page.tsx:58 allBooks: (39) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-page.tsx:70 withBooks: (2) [{…}, {…}]
-page.tsx:113 CategoryForm categories: (2) [{…}, {…}]
-page.tsx:113 CategoryForm categories: (2) [{…}, {…}]
-CategoryForm.tsx:127 CategoryForm received: (2) [{…}, {…}]
-CategoryForm.tsx:127 CategoryForm received: (2) [{…}, {…}]
+hook.js:608 카테고리 조회 실패: Object
+overrideMethod @ hook.js:608
+hook.js:608 카테고리 로딩 실패: Object
+overrideMethod @ hook.js:608

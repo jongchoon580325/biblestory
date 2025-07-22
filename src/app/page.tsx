@@ -110,6 +110,7 @@ export default function Home() {
     <div className="min-h-screen bg-slate-900" style={{ backgroundColor: '#292828' }}>
       {/* 배경 그라데이션 */}
       <div className="fixed inset-0 bg-gradient-to-br from-blue-900/10 via-purple-900/10 to-slate-900/10 pointer-events-none" />
+      
       {/* 네비게이션 */}
       <nav className="bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/50 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6">
@@ -126,22 +127,28 @@ export default function Home() {
             </div>
             <div className="flex items-center space-x-1">
               <Link href="/" className="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-blue-400 border border-blue-500/30 bg-blue-500/20">HOME</Link>
+              <Link href="/read" className="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50">READ</Link>
               <Link href="/data" className="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50">DATA</Link>
             </div>
           </div>
         </div>
       </nav>
+
       <main className="max-w-6xl mx-auto px-6 py-8 relative">
         <div className="space-y-8">
-          {/* 헤더 섹션 */}
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-              성경공부 자료실
-            </h1>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-              체계적으로 정리된 성경공부 자료로 깊이 있는 말씀 묵상을 시작하세요
-            </p>
+          {/* 스티키 헤더 섹션 */}
+          <div className="sticky top-0 z-20 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50 -mx-6 px-6 py-4">
+            <div className="text-center space-y-4">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
+                Bible Room Study
+              </h1>
+              <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+                하나님의 말씀을 깊이 있게 공부하는 개인 성경 공부실입니다.
+              </p>
+            </div>
           </div>
+
+
           
           {/* 로딩 상태 */}
           {loading && (
@@ -270,6 +277,7 @@ export default function Home() {
           )}
         </div>
       </main>
+
       {/* 푸터 */}
       <footer className="mt-16 border-t border-slate-700/50 py-8">
         <div className="max-w-6xl mx-auto px-6 text-center">

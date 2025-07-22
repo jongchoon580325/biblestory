@@ -3,10 +3,52 @@
 ## 🎯 **문서 개요**
 
 ### **문서명**: 성경읽기 페이지 상세 설계서
-### **버전**: v1.0.0
+### **버전**: v2.0.0
 ### **작성일**: 2025.07.08
-### **최종 수정일**: 2025.07.08
-### **의존성**: 00-전체아키텍처-PRD.md, 05-공통시스템-PRD.md
+### **최종 수정일**: 2025.07.18
+
+---
+
+## 🔍 **현재 프로젝트 환경 분석 및 적용 가능성**
+
+### **기술 스택 호환성 평가** ✅
+- **Next.js 15**: PRD 요구사항과 완벽 호환
+- **React 19**: 최신 기능 활용 가능
+- **TypeScript**: 타입 안정성 확보
+- **Tailwind CSS**: 반응형 디자인 구현 가능
+- **Supabase**: 데이터베이스 및 인증 시스템 완벽 지원
+- **Zustand**: 복잡한 상태 관리 요구사항 충족
+- **Shadcn/UI**: 고급 UI 컴포넌트 라이브러리 적용
+
+### **독립적 데이터 모델 설계** ✅
+- **기존 `bibleMapping.ts`와 완전 분리**: PRD의 `BibleBook` 인터페이스 독립 구현
+- **새로운 데이터 구조**: `id`, `nameEnglish`, `abbreviation` 등 PRD 요구사항 그대로 적용
+- **타입 안정성**: TypeScript 인터페이스로 완전한 타입 체크
+
+### **독립적 Supabase 테이블 구조** ✅
+- **신규 테이블 생성**: `b_bible_contents`, `b_reading_progress` 독립 구현
+- **기존 테이블과 분리**: `b_materials`, `b_categories`와 완전 독립 운영
+- **데이터 무결성**: 성경읽기 전용 데이터 모델로 일관성 확보
+
+### **UI 컴포넌트 라이브러리** ✅
+- **shadcn/ui 적용**: Modal, Button, Select 등 고급 컴포넌트 구현
+- **일관된 디자인 시스템**: Tailwind CSS와 완벽 통합
+- **접근성 준수**: ARIA 레이블 및 키보드 네비게이션 지원
+
+### **독립적 FileUpload 컴포넌트** ✅
+- **READ 페이지 전용**: 기존 FileUpload와 별개로 신규 구현
+- **성경읽기 특화**: 성경 콘텐츠 업로드에 최적화된 기능
+- **사용자 경험**: 직관적이고 효율적인 업로드 인터페이스
+
+### **동적 라우팅 구조** ✅
+- **Next.js App Router**: `/read/[book]/[chapter]` 동적 라우팅 구현
+- **SEO 최적화**: 메타데이터 및 구조화된 데이터 지원
+- **성능 최적화**: 자동 코드 스플리팅 및 지연 로딩
+
+### **완전 독립적 시스템** ✅
+- **모듈화 설계**: 기존 프로젝트와 완전 분리
+- **확장성**: 향후 기능 추가 및 수정 용이
+- **유지보수성**: 명확한 책임 분리 및 의존성 관리
 
 ---
 
@@ -15,36 +57,560 @@
 > **"몰입형 성경 읽기 경험을 제공하는 차세대 디지털 성경 플랫폼의 핵심 MVP"**
 
 ### **핵심 가치 제안**
-- **Progressive Reading**: 구약→책→장 단계별 선택으로 자연스러운 읽기 흐름
-- **Multi-Modal Experience**: 읽기와 듣기를 완벽하게 통합한 멀티모달 경험
-- **Personal Progress**: 개인화된 읽기 진도 추적과 완료 체크 시스템
-- **Flexible Display**: 3가지 읽기 모드로 개인 선호에 맞춘 최적화
-- **Smart Highlights**: 개인/커뮤니티 하이라이트로 풍부한 묵상 지원
+- **Progressive Reading**: 구약/신약→책→장 단계별 선택으로 자연스러운 읽기 흐름
+- **Multi-Modal Experience**: 읽기와 듣기를 완벽하게 통합한 TTS 경험
+- **Simple & Focused**: 핵심 기능에 집중한 직관적이고 빠른 성경 읽기
+- **HTML Rendering**: 업로드된 HTML 파일 소스의 완벽한 렌더링
+- **Real-time Highlight**: TTS 재생 중 현재 읽는 절의 실시간 하이라이트
+
+---
+
+## 🏗️ **독립적 데이터 모델 설계**
+
+### **독립적 BibleBook 인터페이스**
+```typescript
+// types/bible-reading.ts
+export interface BibleBook {
+  id: string;
+  name: string;
+  nameEnglish: string;
+  abbreviation: string;
+  totalChapters: number;
+  category: 'old-testament' | 'new-testament';
+  completedChapters: number;
+  currentChapter?: number;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface BibleChapter {
+  id: string;
+  bookId: string;
+  chapterNumber: number;
+  title: string;
+  subtitle?: string;
+  estimatedReadingTime: number;
+  wordCount: number;
+  verses: BibleVerse[];
+  status: 'draft' | 'published' | 'archived';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface BibleVerse {
+  id: string;
+  chapterId: string;
+  number: number;
+  text: string;
+  reference: string;
+  isHighlighted?: boolean;
+  highlightType?: 'personal' | 'community' | 'study';
+  notes?: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ReadingProgress {
+  id: string;
+  userId: string;
+  bookId: string;
+  chapterNumber: number;
+  readingCompleted: boolean;
+  listeningCompleted: boolean;
+  readingDuration: number;
+  listeningDuration: number;
+  completionPercentage: number;
+  scrollProgress: number;
+  versesRead: number[];
+  lastReadAt: Date;
+  completedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface UserHighlight {
+  id: string;
+  userId: string;
+  verseId: string;
+  type: 'personal' | 'community' | 'study';
+  color?: string;
+  note?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+### **독립적 Supabase 테이블 스키마**
+```sql
+-- 성경 책 정보 테이블
+CREATE TABLE rb_bible_books (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(50) NOT NULL,
+  name_english VARCHAR(50) NOT NULL,
+  abbreviation VARCHAR(10) NOT NULL,
+  total_chapters INTEGER NOT NULL,
+  category VARCHAR(20) NOT NULL CHECK (category IN ('old-testament', 'new-testament')),
+  order_number INTEGER NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 성경 장 정보 테이블
+CREATE TABLE rb_bible_chapters (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  book_id UUID REFERENCES rb_bible_books(id) ON DELETE CASCADE,
+  chapter_number INTEGER NOT NULL,
+  title VARCHAR(200) NOT NULL,
+  subtitle VARCHAR(200),
+  estimated_reading_time INTEGER DEFAULT 0,
+  word_count INTEGER DEFAULT 0,
+  html_content TEXT,
+  status VARCHAR(20) DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'archived')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(book_id, chapter_number)
+);
+
+-- 성경 구절 정보 테이블
+CREATE TABLE rb_bible_verses (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  chapter_id UUID REFERENCES rb_bible_chapters(id) ON DELETE CASCADE,
+  verse_number INTEGER NOT NULL,
+  text TEXT NOT NULL,
+  reference VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(chapter_id, verse_number)
+);
+
+-- 읽기 진도 추적 테이블
+CREATE TABLE rb_reading_progress (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  book_id UUID REFERENCES rb_bible_books(id) ON DELETE CASCADE,
+  chapter_number INTEGER NOT NULL,
+  reading_completed BOOLEAN DEFAULT FALSE,
+  listening_completed BOOLEAN DEFAULT FALSE,
+  reading_duration INTEGER DEFAULT 0,
+  listening_duration INTEGER DEFAULT 0,
+  completion_percentage DECIMAL(5,2) DEFAULT 0,
+  scroll_progress DECIMAL(5,2) DEFAULT 0,
+  verses_read INTEGER[] DEFAULT '{}',
+  last_read_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  completed_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, book_id, chapter_number)
+);
+
+-- 사용자 하이라이트 테이블
+CREATE TABLE rb_user_highlights (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  verse_id UUID REFERENCES rb_bible_verses(id) ON DELETE CASCADE,
+  type VARCHAR(20) NOT NULL CHECK (type IN ('personal', 'community', 'study')),
+  color VARCHAR(7),
+  note TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 인덱스 생성
+CREATE INDEX idx_rb_bible_books_category ON rb_bible_books(category);
+CREATE INDEX idx_rb_bible_chapters_book_id ON rb_bible_chapters(book_id);
+CREATE INDEX idx_rb_bible_verses_chapter_id ON rb_bible_verses(chapter_id);
+CREATE INDEX idx_rb_reading_progress_user_book ON rb_reading_progress(user_id, book_id);
+CREATE INDEX idx_rb_user_highlights_user_verse ON rb_user_highlights(user_id, verse_id);
+
+-- RLS (Row Level Security) 정책
+ALTER TABLE rb_bible_books ENABLE ROW LEVEL SECURITY;
+ALTER TABLE rb_bible_chapters ENABLE ROW LEVEL SECURITY;
+ALTER TABLE rb_bible_verses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE rb_reading_progress ENABLE ROW LEVEL SECURITY;
+ALTER TABLE rb_user_highlights ENABLE ROW LEVEL SECURITY;
+
+-- 공개 읽기 정책 (성경 내용은 모든 사용자가 읽기 가능)
+CREATE POLICY "Public read access" ON rb_bible_books FOR SELECT USING (true);
+CREATE POLICY "Public read access" ON rb_bible_chapters FOR SELECT USING (true);
+CREATE POLICY "Public read access" ON rb_bible_verses FOR SELECT USING (true);
+
+-- 사용자별 읽기/쓰기 정책 (진도 및 하이라이트는 본인만)
+CREATE POLICY "User read/write access" ON rb_reading_progress 
+  FOR ALL USING (auth.uid() = user_id);
+
+CREATE POLICY "User read/write access" ON rb_user_highlights 
+  FOR ALL USING (auth.uid() = user_id);
+```
+
+---
+
+## 📁 **독립적 FileUpload 컴포넌트 설계**
+
+### **READ 페이지 전용 FileUpload 인터페이스**
+```typescript
+// components/features/bible-reading/BibleFileUpload.tsx
+interface BibleFileUploadProps {
+  onUploadComplete: (fileData: BibleFileData) => void;
+  onUploadError: (error: string) => void;
+  maxFileSize?: number; // 기본값: 10MB
+  allowedFormats?: string[]; // 기본값: ['html', 'htm']
+}
+
+interface BibleFileData {
+  id: string;
+  fileName: string;
+  fileSize: number;
+  uploadDate: Date;
+  bookId: string;
+  chapterNumber: number;
+  content: string;
+  metadata: {
+    title: string;
+    subtitle?: string;
+    estimatedReadingTime: number;
+    wordCount: number;
+  };
+}
+
+const BibleFileUpload: React.FC<BibleFileUploadProps> = ({
+  onUploadComplete,
+  onUploadError,
+  maxFileSize = 10 * 1024 * 1024, // 10MB
+  allowedFormats = ['html', 'htm']
+}) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [previewContent, setPreviewContent] = useState<string>('');
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+
+  // 파일 유효성 검사
+  const validateFile = (file: File): string[] => {
+    const errors: string[] = [];
+    
+    // 파일 크기 검사
+    if (file.size > maxFileSize) {
+      errors.push(`파일 크기가 ${maxFileSize / (1024 * 1024)}MB를 초과합니다.`);
+    }
+    
+    // 파일 형식 검사
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    if (!fileExtension || !allowedFormats.includes(fileExtension)) {
+      errors.push(`지원하지 않는 파일 형식입니다. (${allowedFormats.join(', ')})`);
+    }
+    
+    // 파일명 형식 검사 (예: 01-genesis-01.html)
+    const fileNamePattern = /^(\d+)-[a-z]+-\d+\.html$/i;
+    if (!fileNamePattern.test(file.name)) {
+      errors.push('파일명 형식이 올바르지 않습니다. (예: 01-genesis-01.html)');
+    }
+    
+    // 접두사와 장 번호 일치 검증
+    const match = file.name.match(/^(\d+)-[a-z]+-(\d+)\.html$/i);
+    if (match) {
+      const [, prefixNumber, chapterNumber] = match;
+      if (parseInt(prefixNumber) !== parseInt(chapterNumber)) {
+        errors.push(`파일명 접두사(${prefixNumber})와 장 번호(${chapterNumber})가 일치하지 않습니다.`);
+      }
+    }
+    
+    return errors;
+  };
+
+  // 파일 내용 미리보기
+  const handleFileSelect = async (file: File) => {
+    const errors = validateFile(file);
+    setValidationErrors(errors);
+    
+    if (errors.length > 0) {
+      setSelectedFile(null);
+      setPreviewContent('');
+      return;
+    }
+    
+    setSelectedFile(file);
+    
+    try {
+      const content = await file.text();
+      setPreviewContent(content);
+      
+      // HTML 파싱 및 메타데이터 추출
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(content, 'text/html');
+      
+      // 제목 추출
+      const title = doc.querySelector('h1, h2, .title')?.textContent || '';
+      const subtitle = doc.querySelector('h3, h4, .subtitle')?.textContent || '';
+      
+      // 단어 수 계산
+      const textContent = doc.body?.textContent || '';
+      const wordCount = textContent.trim().split(/\s+/).length;
+      
+      // 예상 읽기 시간 계산 (평균 200단어/분)
+      const estimatedReadingTime = Math.ceil(wordCount / 200);
+      
+      console.log('파일 메타데이터:', {
+        title,
+        subtitle,
+        wordCount,
+        estimatedReadingTime
+      });
+      
+    } catch (error) {
+      setValidationErrors(['파일 내용을 읽을 수 없습니다.']);
+    }
+  };
+
+  // 파일 업로드 처리
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+    
+    setIsUploading(true);
+    setUploadProgress(0);
+    
+    try {
+      // 파일명에서 책명과 장 번호 추출
+      const fileNameMatch = selectedFile.name.match(/^(\d+)-([a-z]+)-(\d+)\.html$/i);
+      if (!fileNameMatch) {
+        throw new Error('파일명 형식이 올바르지 않습니다.');
+      }
+      
+      const [, prefixNumber, bookName, chapterStr] = fileNameMatch;
+      const chapterNumber = parseInt(chapterStr);
+      
+      // 접두사와 장 번호 일치 검증
+      if (parseInt(prefixNumber) !== chapterNumber) {
+        throw new Error(`파일명 접두사(${prefixNumber})와 장 번호(${chapterNumber})가 일치하지 않습니다.`);
+      }
+      
+      // Supabase Storage에 업로드
+      const filePath = `bible-content/${bookName}/${selectedFile.name}`;
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('biblefiles')
+        .upload(filePath, selectedFile, {
+          onUploadProgress: (progress) => {
+            setUploadProgress((progress.loaded / progress.total) * 100);
+          }
+        });
+      
+      if (uploadError) throw uploadError;
+      
+      // 데이터베이스에 메타데이터 저장
+      const content = await selectedFile.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(content, 'text/html');
+      
+      const fileData: BibleFileData = {
+        id: uploadData.path,
+        fileName: selectedFile.name,
+        fileSize: selectedFile.size,
+        uploadDate: new Date(),
+        bookId: bookName,
+        chapterNumber,
+        content,
+        metadata: {
+          title: doc.querySelector('h1, h2, .title')?.textContent || '',
+          subtitle: doc.querySelector('h3, h4, .subtitle')?.textContent || '',
+          estimatedReadingTime: Math.ceil((doc.body?.textContent || '').trim().split(/\s+/).length / 200),
+          wordCount: (doc.body?.textContent || '').trim().split(/\s+/).length
+        }
+      };
+      
+      onUploadComplete(fileData);
+      
+    } catch (error) {
+      onUploadError(error instanceof Error ? error.message : '업로드 중 오류가 발생했습니다.');
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
+  };
+
+  return (
+    <div className="bible-file-upload">
+      <div className="upload-area">
+        <input
+          type="file"
+          accept=".html,.htm"
+          onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])}
+          className="file-input"
+          disabled={isUploading}
+        />
+        
+        {selectedFile && (
+          <div className="file-info">
+            <h4>선택된 파일: {selectedFile.name}</h4>
+            <p>크기: {(selectedFile.size / 1024).toFixed(2)} KB</p>
+            
+            {validationErrors.length > 0 && (
+              <div className="validation-errors">
+                {validationErrors.map((error, index) => (
+                  <p key={index} className="error-text">{error}</p>
+                ))}
+              </div>
+            )}
+            
+            {previewContent && (
+              <div className="content-preview">
+                <h5>내용 미리보기</h5>
+                <div 
+                  className="preview-content"
+                  dangerouslySetInnerHTML={{ __html: previewContent.substring(0, 500) + '...' }}
+                />
+              </div>
+            )}
+            
+            <button
+              onClick={handleUpload}
+              disabled={isUploading || validationErrors.length > 0}
+              className="upload-btn"
+            >
+              {isUploading ? '업로드 중...' : '업로드'}
+            </button>
+            
+            {isUploading && (
+              <div className="upload-progress">
+                <div 
+                  className="progress-bar"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+                <span>{Math.round(uploadProgress)}%</span>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+```
+
+### **독립적 FileUpload 스타일링**
+```css
+/* components/features/bible-reading/BibleFileUpload.css */
+.bible-file-upload {
+  @apply w-full max-w-2xl mx-auto p-6 bg-slate-800/30 backdrop-blur-sm rounded-2xl border border-slate-700/50;
+}
+
+.upload-area {
+  @apply space-y-4;
+}
+
+.file-input {
+  @apply w-full p-4 border-2 border-dashed border-slate-600 rounded-lg text-center cursor-pointer transition-colors hover:border-blue-500 focus:border-blue-500 focus:outline-none;
+}
+
+.file-info {
+  @apply space-y-4 p-4 bg-slate-700/30 rounded-lg;
+}
+
+.validation-errors {
+  @apply space-y-1;
+}
+
+.error-text {
+  @apply text-red-400 text-sm;
+}
+
+.content-preview {
+  @apply space-y-2;
+}
+
+.preview-content {
+  @apply max-h-40 overflow-y-auto p-3 bg-slate-900/50 rounded text-sm text-slate-300;
+}
+
+.upload-btn {
+  @apply w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.upload-progress {
+  @apply space-y-2;
+}
+
+.progress-bar {
+  @apply h-2 bg-slate-600 rounded-full overflow-hidden;
+}
+
+.progress-bar > div {
+  @apply h-full bg-blue-500 transition-all duration-300;
+}
+```
 
 ---
 
 ## 🏗️ **페이지 아키텍처**
 
+### **최종 구현 체크리스트**
+
+#### **1. 핵심 기능 구현**
+- [ ] **왼쪽 사이드바**: 구약/신약 탭, 책 목록, 장 목록
+- [ ] **상단 헤더**: 선택된 책명과 장 숫자 표시
+- [ ] **중앙 본문**: HTML 파일 소스 완벽 렌더링
+- [ ] **하단 네비게이션**: 이전/다음 장 버튼
+- [ ] **TTS 기능**: 성경 본문 읽기 콘트롤
+- [ ] **하이라이트**: 현재 읽는 절 실시간 하이라이트
+
+#### **2. 삭제된 부수 기능**
+- ❌ 읽기 모드 (기본/집중/야간)
+- ❌ 진행률 표시
+- ❌ 개인/커뮤니티 하이라이트
+- ❌ 책갈피 기능
+- ❌ 복잡한 메타데이터 표시
+- ❌ 구절별 개별 TTS 버튼
+- ❌ 하단 복잡한 컨트롤
+
+#### **3. 기술적 요구사항**
+- [ ] HTML 파일 업로드 및 저장 시스템
+- [ ] HTML 콘텐츠 렌더링 (`dangerouslySetInnerHTML`)
+- [ ] Web Speech API를 활용한 TTS 구현
+- [ ] 구절별 하이라이트 CSS 스타일링
+- [ ] 장 네비게이션 API 구현
+- [ ] 반응형 레이아웃 (데스크톱/태블릿/모바일)
+
+#### **4. 사용자 경험**
+- [ ] 직관적이고 빠른 성경 읽기
+- [ ] TTS 재생 중 현재 구절 시각적 표시
+- [ ] 간단한 장 이동 네비게이션
+- [ ] 사이드바를 통한 빠른 책/장 선택
+
 ### **전체 레이아웃 구조**
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  📊 Progress Bar (읽기 진행률 표시)                      │
+│                    네비게이션 (기존)                      │
 ├─────────────────┬───────────────────────────────────────┤
-│                 │  🔗 Breadcrumb (구약 > 창세기 > 1장)    │
-│  📋 Navigation  │  📖 Chapter Title & Meta Info          │
-│  Sidebar        ├───────────────────────────────────────┤
-│                 │  🎵 Audio Player Controls              │
-│  📖 Books       ├───────────────────────────────────────┤
-│  📊 Chapters    │  ⚙️ Reading Mode Controls              │
-│  📈 Progress    ├───────────────────────────────────────┤
 │                 │                                       │
-│                 │  📜 Bible Content                     │
-│                 │  (Main Reading Area)                  │
+│   성경 선택     │            창세기 1장                  │
+│   사이드바      ├───────────────────────────────────────┤
 │                 │                                       │
-│                 │  ✅ Verse Interactions                │
-│                 │  (Highlights, Notes)                  │
+│ ┌─────────────┐ │        HTML 본문 렌더링               │
+│ │ 구약/신약   │ │        (구절별 구조화)                │
+│ │   탭        │ │        [TTS 재생 중 하이라이트]       │
+│ └─────────────┘ │                                       │
+│                 │                                       │
+│ ┌─────────────┐ │                                       │
+│ │ 책 목록     │ │                                       │
+│ │ (스크롤)    │ │                                       │
+│ └─────────────┘ │                                       │
+│                 │                                       │
+│ ┌─────────────┐ │                                       │
+│ │ 장 목록     │ │                                       │
+│ │ (스크롤)    │ │                                       │
+│ └─────────────┘ │                                       │
+│                 │                                       │
+│                 ├───────────────────────────────────────┤
+│                 │        [이전 장] [다음 장]             │
 └─────────────────┴───────────────────────────────────────┘
 ```
+
+**핵심 기능 구성:**
+- **왼쪽 사이드바**: 구약/신약 탭, 책 목록, 장 목록 (기존 유지)
+- **오른쪽 읽기 영역**: 
+  - 상단: 선택된 책명과 장 숫자 표시
+  - 중앙: HTML 파일 소스 완벽 렌더링
+  - 하단: 이전/다음 장 네비게이션
+- **핵심 기능**: TTS 읽기 콘트롤, 현재 읽는 절 하이라이트
 
 ### **반응형 레이아웃 전략**
 ```css
@@ -706,32 +1272,184 @@ const TTSSettingsPanel: React.FC<{
 
 ## 📖 **3. 본문 표시 시스템**
 
-### **3-1. 읽기 모드 전환 컨트롤**
-```typescript
-type ReadingMode = 'verse' | 'paragraph' | 'meditation';
+### **3-1. 성경 읽기 핵심 기능**
 
-interface ReadingModeControlsProps {
-  currentMode: ReadingMode;
-  onModeChange: (mode: ReadingMode) => void;
-  fontSize: 'small' | 'medium' | 'large' | 'xl';
-  onFontSizeChange: (size: 'small' | 'medium' | 'large' | 'xl') => void;
-  theme: 'dark' | 'light';
-  onThemeToggle: () => void;
+#### **3-1-1. 상단 헤더 영역**
+```typescript
+interface ChapterHeaderProps {
+  bookName: string;
+  chapterNumber: number;
+  chapterTitle?: string;
 }
 
-const ReadingModeControls: React.FC<ReadingModeControlsProps> = ({
-  currentMode,
-  onModeChange,
-  fontSize,
-  onFontSizeChange,
-  theme,
-  onThemeToggle
+const ChapterHeader: React.FC<ChapterHeaderProps> = ({
+  bookName,
+  chapterNumber,
+  chapterTitle
 }) => {
-  const modeOptions = [
-    { value: 'verse', label: '구절별', icon: 'list', description: '각 구절을 독립적으로 표시' },
-    { value: 'paragraph', label: '문단형', icon: 'fileText', description: '자연스러운 문단 흐름' },
-    { value: 'meditation', label: '묵상모드', icon: 'heart', description: '집중적인 읽기를 위한 레이아웃' }
-  ] as const;
+  return (
+    <div className="chapter-header">
+      <h1 className="chapter-title">
+        {bookName} {chapterNumber}장
+      </h1>
+      {chapterTitle && (
+        <p className="chapter-subtitle">{chapterTitle}</p>
+      )}
+    </div>
+  );
+};
+```
+
+#### **3-1-2. HTML 본문 렌더링 영역**
+```typescript
+interface BibleContentProps {
+  htmlContent: string;
+  currentAudioVerse?: number;
+  onVerseClick?: (verseNumber: number) => void;
+}
+
+const BibleContent: React.FC<BibleContentProps> = ({
+  htmlContent,
+  currentAudioVerse,
+  onVerseClick
+}) => {
+  return (
+    <div className="bible-content">
+      <div 
+        className="html-content"
+        dangerouslySetInnerHTML={{ __html: htmlContent }}
+        onClick={(e) => {
+          const verseElement = (e.target as HTMLElement).closest('[data-verse]');
+          if (verseElement) {
+            const verseNumber = parseInt(verseElement.getAttribute('data-verse') || '0');
+            onVerseClick?.(verseNumber);
+          }
+        }}
+      />
+      {currentAudioVerse && (
+        <div className="current-verse-highlight" data-verse={currentAudioVerse}>
+          현재 읽는 구절: {currentAudioVerse}절
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
+#### **3-1-3. 하단 네비게이션 영역**
+```typescript
+interface ChapterNavigationProps {
+  hasPreviousChapter: boolean;
+  hasNextChapter: boolean;
+  onPreviousChapter: () => void;
+  onNextChapter: () => void;
+}
+
+const ChapterNavigation: React.FC<ChapterNavigationProps> = ({
+  hasPreviousChapter,
+  hasNextChapter,
+  onPreviousChapter,
+  onNextChapter
+}) => {
+  return (
+    <div className="chapter-navigation">
+      <button 
+        className="nav-btn prev-btn"
+        disabled={!hasPreviousChapter}
+        onClick={onPreviousChapter}
+        aria-label="이전 장으로 이동"
+      >
+        이전 장
+      </button>
+      <button 
+        className="nav-btn next-btn"
+        disabled={!hasNextChapter}
+        onClick={onNextChapter}
+        aria-label="다음 장으로 이동"
+      >
+        다음 장
+      </button>
+    </div>
+  );
+};
+```
+
+### **3-2. TTS 읽기 콘트롤**
+```typescript
+interface TTSControlsProps {
+  isPlaying: boolean;
+  currentVerse: number;
+  totalVerses: number;
+  onPlay: () => void;
+  onPause: () => void;
+  onStop: () => void;
+  onVerseSelect: (verseNumber: number) => void;
+}
+
+const TTSControls: React.FC<TTSControlsProps> = ({
+  isPlaying,
+  currentVerse,
+  totalVerses,
+  onPlay,
+  onPause,
+  onStop,
+  onVerseSelect
+}) => {
+  return (
+    <div className="tts-controls">
+      <div className="tts-buttons">
+        <button 
+          className="tts-btn play-btn"
+          onClick={isPlaying ? onPause : onPlay}
+          aria-label={isPlaying ? '일시정지' : '재생'}
+        >
+          {isPlaying ? '⏸️' : '▶️'}
+        </button>
+        <button 
+          className="tts-btn stop-btn"
+          onClick={onStop}
+          aria-label="정지"
+        >
+          ⏹️
+        </button>
+      </div>
+      
+      <div className="tts-progress">
+        <span className="current-verse">현재: {currentVerse}절</span>
+        <span className="total-verses">전체: {totalVerses}절</span>
+      </div>
+    </div>
+  );
+};
+```
+
+### **3-3. 현재 읽는 절 하이라이트 기능**
+```typescript
+interface VerseHighlightProps {
+  currentVerse: number;
+  verses: Array<{ number: number; text: string }>;
+}
+
+const VerseHighlight: React.FC<VerseHighlightProps> = ({
+  currentVerse,
+  verses
+}) => {
+  return (
+    <div className="verse-highlight-container">
+      {verses.map(verse => (
+        <div
+          key={verse.number}
+          className={`verse ${currentVerse === verse.number ? 'highlighted' : ''}`}
+          data-verse={verse.number}
+        >
+          <span className="verse-number">{verse.number}</span>
+          <span className="verse-text">{verse.text}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+```
 
   const fontSizeOptions = [
     { value: 'small', label: '작게' },
@@ -1854,19 +2572,18 @@ const useTouchGestures = (
 
 ## 💾 **7. 데이터 관리 및 API**
 
-### **7-1. Supabase 쿼리 함수들**
+### **7-1. HTML 파일 렌더링 API**
 ```typescript
 // api/bible.ts
 export interface BibleChapterData {
   id: string;
   book_id: string;
   chapter_number: number;
-  verses: BibleVerse[];
+  html_content: string;
   metadata: {
     title: string;
-    subtitle: string;
-    estimated_reading_time: number;
-    word_count: number;
+    subtitle?: string;
+    total_verses: number;
   };
 }
 
@@ -1875,12 +2592,12 @@ export const fetchBibleChapter = async (
   chapterNumber: number
 ): Promise<BibleChapterData> => {
   const { data, error } = await supabase
-    .from('b_bible_contents')
+    .from('rb_bible_chapters')
     .select(`
       *,
-      bible_book:b_bible_books(*)
+      bible_book:rb_bible_books(*)
     `)
-    .eq('bible_book_id', bookId)
+    .eq('book_id', bookId)
     .eq('chapter_number', chapterNumber)
     .eq('status', 'published')
     .single();
@@ -1889,31 +2606,40 @@ export const fetchBibleChapter = async (
   
   return {
     id: data.id,
-    book_id: data.bible_book_id,
+    book_id: data.book_id,
     chapter_number: data.chapter_number,
-    verses: parseVersesFromContent(data.html_content),
+    html_content: data.html_content,
     metadata: {
       title: data.title,
       subtitle: data.subtitle || '',
-      estimated_reading_time: data.estimated_reading_time || 0,
-      word_count: data.word_count || 0
+      total_verses: data.total_verses || 0
     }
   };
 };
 
-export const saveReadingProgress = async (session: ReadingSession) => {
-  const { error } = await supabase
-    .from('b_reading_progress')
-    .upsert({
-      user_session: getUserSession(),
-      bible_book_id: session.bookId,
-      chapter_number: session.chapterNumber,
-      reading_completed: session.completed,
-      reading_duration: session.readingDuration,
-      listening_duration: session.listeningDuration,
-      reading_percentage: session.completionPercentage,
-      completion_date: session.completed ? session.endTime : null,
-      highlights: session.versesRead
+export const getChapterNavigation = async (
+  bookId: string, 
+  currentChapter: number
+) => {
+  const { data: chapters, error } = await supabase
+    .from('rb_bible_chapters')
+    .select('chapter_number')
+    .eq('book_id', bookId)
+    .order('chapter_number');
+
+  if (error) throw error;
+  
+  const chapterNumbers = chapters.map(c => c.chapter_number);
+  const currentIndex = chapterNumbers.indexOf(currentChapter);
+  
+  return {
+    hasPrevious: currentIndex > 0,
+    hasNext: currentIndex < chapterNumbers.length - 1,
+    previousChapter: currentIndex > 0 ? chapterNumbers[currentIndex - 1] : null,
+    nextChapter: currentIndex < chapterNumbers.length - 1 ? chapterNumbers[currentIndex + 1] : null
+  };
+};
+      verses_read: session.versesRead
     });
 
   if (error) throw error;
@@ -1923,10 +2649,10 @@ export const fetchReadingProgress = async (
   bookId: string
 ): Promise<Record<number, any>> => {
   const { data, error } = await supabase
-    .from('b_reading_progress')
+    .from('rb_reading_progress')
     .select('*')
-    .eq('user_session', getUserSession())
-    .eq('bible_book_id', bookId);
+    .eq('user_id', getUserSession())
+    .eq('book_id', bookId);
 
   if (error) throw error;
   
@@ -1934,7 +2660,7 @@ export const fetchReadingProgress = async (
     acc[item.chapter_number] = {
       readingCompleted: item.reading_completed,
       listeningCompleted: item.listening_completed,
-      completionPercentage: item.reading_percentage
+      completionPercentage: item.completion_percentage
     };
     return acc;
   }, {});
@@ -1959,8 +2685,8 @@ export const useRealtimeProgress = (bookId: string) => {
         {
           event: '*',
           schema: 'public',
-          table: 'b_reading_progress',
-          filter: `bible_book_id=eq.${bookId}`
+          table: 'rb_reading_progress',
+          filter: `book_id=eq.${bookId}`
         },
         (payload) => {
           if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
@@ -1969,7 +2695,7 @@ export const useRealtimeProgress = (bookId: string) => {
               [payload.new.chapter_number]: {
                 readingCompleted: payload.new.reading_completed,
                 listeningCompleted: payload.new.listening_completed,
-                completionPercentage: payload.new.reading_percentage
+                completionPercentage: payload.new.completion_percentage
               }
             }));
           }
@@ -1989,6 +2715,12 @@ export const useRealtimeProgress = (bookId: string) => {
 ---
 
 ## ✅ **구현 체크리스트**
+
+### **환경 설정 및 의존성**
+- [ ] shadcn/ui 설치 및 초기 설정
+- [ ] 독립적 데이터 모델 타입 정의 (`types/bible-reading.ts`)
+- [ ] 독립적 Supabase 테이블 스키마 생성
+- [ ] 동적 라우팅 구조 설정 (`/read/[book]/[chapter]`)
 
 ### **네비게이션 시스템**
 - [ ] 신/구약 토글 스위치 구현
@@ -2018,6 +2750,13 @@ export const useRealtimeProgress = (bookId: string) => {
 - [ ] 실시간 진도 표시
 - [ ] Supabase 데이터 동기화
 
+### **독립적 FileUpload 시스템**
+- [ ] READ 페이지 전용 FileUpload 컴포넌트
+- [ ] 성경 콘텐츠 특화 업로드 기능
+- [ ] 실시간 미리보기 및 검증
+- [ ] 업로드 진행률 표시
+- [ ] 에러 처리 및 복구 기능
+
 ### **반응형 최적화**
 - [ ] 모바일 터치 제스처 지원
 - [ ] 태블릿 레이아웃 최적화
@@ -2025,7 +2764,7 @@ export const useRealtimeProgress = (bookId: string) => {
 - [ ] 성능 최적화 (lazy loading)
 
 ### **데이터 관리**
-- [ ] Supabase 쿼리 함수 구현
+- [ ] 독립적 Supabase 쿼리 함수 구현
 - [ ] 실시간 데이터 동기화
 - [ ] 로컬 스토리지 백업
 - [ ] 오프라인 모드 지원
@@ -2036,13 +2775,354 @@ export const useRealtimeProgress = (bookId: string) => {
 
 성경읽기 페이지 설계 완료 후 다음 순서로 진행:
 
-1. **04-데이터관리-PRD.md** - 관리자 도구 및 콘텐츠 관리 시스템
-2. **03-성경자료실-PRD.md** - HTML 편집기 및 자료 관리 기능
-3. **01-HOME-PRD.md** - 통합 대시보드 및 분석 기능
+1. **shadcn/ui 환경 설정** - UI 컴포넌트 라이브러리 설치 및 설정
+2. **독립적 데이터 모델 구현** - 타입 정의 및 Supabase 테이블 생성
+3. **동적 라우팅 구조 구축** - `/read/[book]/[chapter]` 라우팅 구현
+4. **04-데이터관리-PRD.md** - 관리자 도구 및 콘텐츠 관리 시스템
+5. **03-성경자료실-PRD.md** - HTML 편집기 및 자료 관리 기능
+6. **01-HOME-PRD.md** - 통합 대시보드 및 분석 기능
 
 ---
 
-**📋 문서 상태**: ✅ **완료** - 성경읽기 페이지 상세 설계 확정  
+**📋 문서 상태**: ✅ **완료** - 성경읽기 페이지 상세 설계 확정 (v2.0.0)  
 **🎯 핵심 기능**: 읽기/듣기/진도추적 통합 완성  
 **📱 사용자 경험**: 몰입형 성경 읽기 환경 구축  
-**📅 다음 리뷰**: 데이터관리 페이지 PRD 작성 후
+**🔧 기술 스택**: Next.js 15, React 19, TypeScript, Tailwind CSS, Supabase, shadcn/ui  
+**📅 다음 리뷰**: shadcn/ui 환경 설정 완료 후
+
+---
+
+## 📖 **성경읽기용 한글 성경 본문 텍스트 소스**
+
+### **1. 텍스트 소스 형태 및 구조**
+
+#### **1-1. 권장 텍스트 소스**
+- **개역개정판 (KRV)**: 가장 널리 사용되는 한글 성경 번역본
+- **새번역 (NIV)**: 현대적이고 읽기 쉬운 번역
+- **공동번역**: 천주교와 개신교가 공동으로 번역한 성경
+- **표준새번역 (KSB)**: 한국성서공회에서 발행한 현대적 번역
+
+#### **1-2. 텍스트 구조 요구사항**
+```html
+<!-- 권장 HTML 구조 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>창세기 1장</title>
+    <meta name="book" content="창세기">
+    <meta name="chapter" content="1">
+    <meta name="translation" content="개역개정">
+</head>
+<body>
+    <div class="bible-chapter">
+        <header class="chapter-header">
+            <h1 class="chapter-title">창세기 1장</h1>
+            <p class="chapter-subtitle">천지 창조</p>
+        </header>
+        
+        <div class="verses-container">
+            <div class="verse" data-verse="1">
+                <span class="verse-number">1</span>
+                <span class="verse-text">태초에 하나님이 천지를 창조하시니라</span>
+            </div>
+            
+            <div class="verse" data-verse="2">
+                <span class="verse-number">2</span>
+                <span class="verse-text">땅이 혼돈하고 공허하며 흑암이 깊음 위에 있고 하나님의 영은 수면 위에 운행하시니라</span>
+            </div>
+            
+            <!-- 추가 구절들... -->
+        </div>
+        
+        <footer class="chapter-footer">
+            <p class="reading-info">예상 읽기 시간: 3분 | 총 31구절</p>
+        </footer>
+    </div>
+</body>
+</html>
+```
+
+#### **1-3. 구절별 데이터 구조**
+```typescript
+interface VerseData {
+  number: number;           // 구절 번호
+  text: string;            // 구절 본문
+  reference: string;       // 성경 참조 (예: "창 1:1")
+  paragraph?: number;      // 문단 구분 (선택사항)
+  section?: string;        // 섹션 제목 (선택사항)
+}
+```
+
+### **2. 텍스트 소스 준비 방법**
+
+#### **2-1. 기존 성경 텍스트 활용**
+```typescript
+// 기존 성경 파일에서 텍스트 추출 및 변환
+const convertExistingBibleText = (htmlContent: string): VerseData[] => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlContent, 'text/html');
+  
+  const verses: VerseData[] = [];
+  const verseElements = doc.querySelectorAll('.verse, [data-verse], p');
+  
+  verseElements.forEach((element, index) => {
+    const verseNumber = parseInt(element.getAttribute('data-verse') || (index + 1).toString());
+    const verseText = element.textContent?.trim() || '';
+    
+    if (verseText) {
+      verses.push({
+        number: verseNumber,
+        text: verseText,
+        reference: `창 ${1}:${verseNumber}` // 동적으로 생성
+      });
+    }
+  });
+  
+  return verses;
+};
+```
+
+#### **2-2. 텍스트 정제 및 표준화**
+```typescript
+// 텍스트 정제 함수
+const sanitizeBibleText = (text: string): string => {
+  return text
+    .replace(/\s+/g, ' ')           // 연속 공백 제거
+    .replace(/[^\w\s가-힣.,!?;:()]/g, '') // 특수문자 정리
+    .trim();
+};
+
+// 구절 번호 추출 함수
+const extractVerseNumber = (text: string): { number: number; cleanText: string } => {
+  const verseMatch = text.match(/^(\d+)\s*[.。]\s*(.+)$/);
+  if (verseMatch) {
+    return {
+      number: parseInt(verseMatch[1]),
+      cleanText: sanitizeBibleText(verseMatch[2])
+    };
+  }
+  
+  // 구절 번호가 없는 경우 처리
+  return {
+    number: 0,
+    cleanText: sanitizeBibleText(text)
+  };
+};
+```
+
+### **3. 텍스트 소스 관리 시스템**
+
+#### **3-1. 파일명 규칙**
+```
+bible-content/
+├── old-testament/
+│   ├── genesis/
+│   │   ├── 01-genesis-01.html
+│   │   ├── 02-genesis-02.html
+│   │   └── ...
+│   ├── exodus/
+│   │   ├── 01-exodus-01.html
+│   │   └── ...
+│   └── ...
+└── new-testament/
+    ├── matthew/
+    │   ├── 01-matthew-01.html
+    │   └── ...
+    └── ...
+```
+
+**파일명 명명 규칙:**
+- **형식**: `{장번호}-{책명영문}-{장번호}.html`
+- **예시**: `01-genesis-01.html`, `05-matthew-05.html`
+- **규칙**: 접두사와 장 번호가 동일한 숫자 형식 사용
+
+#### **3-2. 메타데이터 구조**
+```json
+{
+  "book": {
+    "name": "창세기",
+    "nameEnglish": "genesis",
+    "abbreviation": "창",
+    "category": "old-testament",
+    "totalChapters": 50,
+    "order": 1
+  },
+  "chapter": {
+    "number": 1,
+    "title": "천지 창조",
+    "subtitle": "하나님의 창조 사역",
+    "estimatedReadingTime": 3,
+    "wordCount": 450,
+    "verseCount": 31
+  },
+  "translation": {
+    "name": "개역개정",
+    "abbreviation": "KRV",
+    "year": 1998,
+    "publisher": "대한성서공회"
+  }
+}
+```
+
+### **4. 텍스트 품질 관리**
+
+#### **4-1. 자동 검증 시스템**
+```typescript
+interface TextValidationResult {
+  isValid: boolean;
+  errors: string[];
+  warnings: string[];
+  statistics: {
+    totalVerses: number;
+    totalWords: number;
+    averageWordsPerVerse: number;
+    missingVerses: number[];
+  };
+}
+
+const validateBibleText = (verses: VerseData[], expectedVerseCount: number): TextValidationResult => {
+  const result: TextValidationResult = {
+    isValid: true,
+    errors: [],
+    warnings: [],
+    statistics: {
+      totalVerses: verses.length,
+      totalWords: 0,
+      averageWordsPerVerse: 0,
+      missingVerses: []
+    }
+  };
+  
+  // 구절 수 검증
+  if (verses.length !== expectedVerseCount) {
+    result.errors.push(`구절 수 불일치: 예상 ${expectedVerseCount}개, 실제 ${verses.length}개`);
+    result.isValid = false;
+  }
+  
+  // 구절 번호 연속성 검증
+  const verseNumbers = verses.map(v => v.number).sort((a, b) => a - b);
+  for (let i = 1; i <= expectedVerseCount; i++) {
+    if (!verseNumbers.includes(i)) {
+      result.statistics.missingVerses.push(i);
+      result.errors.push(`누락된 구절: ${i}절`);
+      result.isValid = false;
+    }
+  }
+  
+  // 텍스트 품질 검증
+  verses.forEach(verse => {
+    if (verse.text.length < 5) {
+      result.warnings.push(`${verse.number}절: 텍스트가 너무 짧습니다`);
+    }
+    
+    if (verse.text.length > 500) {
+      result.warnings.push(`${verse.number}절: 텍스트가 너무 깁니다`);
+    }
+    
+    result.statistics.totalWords += verse.text.split(/\s+/).length;
+  });
+  
+  result.statistics.averageWordsPerVerse = 
+    Math.round(result.statistics.totalWords / verses.length);
+  
+  return result;
+};
+```
+
+#### **4-2. 텍스트 정규화**
+```typescript
+// 구절 텍스트 정규화
+const normalizeVerseText = (text: string): string => {
+  return text
+    .replace(/[^\w\s가-힣.,!?;:()]/g, '') // 특수문자 제거
+    .replace(/\s+/g, ' ')                 // 공백 정리
+    .replace(/^[\d\s.。]+/, '')           // 앞쪽 구절 번호 제거
+    .trim();
+};
+
+// 참조 형식 표준화
+const normalizeReference = (book: string, chapter: number, verse: number): string => {
+  const bookAbbr = getBookAbbreviation(book);
+  return `${bookAbbr} ${chapter}:${verse}`;
+};
+```
+
+### **5. 성능 최적화**
+
+#### **5-1. 텍스트 압축 및 캐싱**
+```typescript
+// 텍스트 압축 (선택사항)
+const compressBibleText = (verses: VerseData[]): string => {
+  const compressed = verses.map(verse => 
+    `${verse.number}:${verse.text}`
+  ).join('|');
+  
+  return btoa(compressed); // Base64 인코딩
+};
+
+// 압축 해제
+const decompressBibleText = (compressed: string): VerseData[] => {
+  const decoded = atob(compressed);
+  return decoded.split('|').map(item => {
+    const [number, text] = item.split(':');
+    return {
+      number: parseInt(number),
+      text,
+      reference: `창 1:${number}` // 동적 생성 필요
+    };
+  });
+};
+```
+
+#### **5-2. 지연 로딩**
+```typescript
+// 구절별 지연 로딩
+const useLazyVerseLoading = (chapterId: string, verseRange: [number, number]) => {
+  const [verses, setVerses] = useState<VerseData[]>([]);
+  const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
+    const loadVerses = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/verses/${chapterId}?start=${verseRange[0]}&end=${verseRange[1]}`);
+        const data = await response.json();
+        setVerses(data);
+      } catch (error) {
+        console.error('구절 로딩 실패:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadVerses();
+  }, [chapterId, verseRange]);
+  
+  return { verses, loading };
+};
+```
+
+### **6. 텍스트 소스 권장사항**
+
+#### **6-1. 텍스트 품질 기준**
+- **정확성**: 원문과의 일치도 99% 이상
+- **가독성**: 현대 한국어 문법에 맞는 자연스러운 표현
+- **일관성**: 용어와 번역 스타일의 통일성
+- **완전성**: 모든 구절이 누락 없이 포함
+
+#### **6-2. 기술적 요구사항**
+- **인코딩**: UTF-8 필수
+- **형식**: HTML 또는 JSON 형태
+- **구조**: 구절별 명확한 구분
+- **메타데이터**: 책, 장, 번역본 정보 포함
+
+#### **6-3. 라이선스 고려사항**
+- **공개 도메인**: 개역개정판, 새번역 등
+- **상업적 사용**: 출판사별 라이선스 확인 필요
+- **저작권**: 번역본별 저작권 정보 명시
+
+---
+
+## 🏗️ **페이지 아키텍처**
