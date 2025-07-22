@@ -89,16 +89,17 @@ const BookList = ({
   return (
     <div className="space-y-3">
       <h4 className="text-sm font-medium text-slate-300">책 선택</h4>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1.5 max-h-48 overflow-y-auto">
+      <div className="grid grid-cols-5 gap-1.5 max-h-48 overflow-y-auto">
         {books.map((book) => (
           <button
             key={book.id}
-            className={`py-2 px-2 rounded-md text-xs transition-colors text-center ${
+            className={`py-2 px-2 rounded-md text-xs transition-colors text-center truncate ${
               selectedBook?.id === book.id
                 ? 'bg-blue-600/20 text-blue-300 border border-blue-500/30' 
                 : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
             }`}
             onClick={() => onSelectBook(book)}
+            title={book.name}
           >
             {book.name}
           </button>
@@ -136,7 +137,7 @@ const ChapterList = ({
       <h4 className="text-sm font-medium text-slate-300">
         장 선택 ({selectedBook.total_chapters}장)
       </h4>
-      <div className="grid grid-cols-8 gap-1 h-32 overflow-y-auto pr-2">
+      <div className="grid grid-cols-6 sm:grid-cols-8 gap-1 h-32 overflow-y-auto pr-2">
         {chapters.map((chapter) => (
           <button
             key={chapter}
@@ -190,7 +191,7 @@ export const SidebarContainer = () => {
   const newTestament = categories.filter(cat => cat.name === '신약');
   
   return (
-    <div className="w-80 flex-shrink-0 bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 p-4">
+    <div className="w-full lg:w-[400px] flex-shrink-0 bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 p-4">
       <div className="space-y-6">
         {/* 에러 메시지 */}
         {error && (

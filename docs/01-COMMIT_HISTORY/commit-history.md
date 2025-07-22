@@ -1,3 +1,27 @@
+### 2025-07-22
+
+5. **기능: 성경읽기 전체화면 모달 완전 구현 및 TTS 기능 제거** (76d099a)
+   - HTML 콘텐츠 크기에 맞춘 동적 모달 크기 조정
+     - iframe 내부 HTML 문서의 실제 크기 측정 로직 구현
+     - scrollWidth, offsetWidth, clientWidth 등 다양한 크기 속성 활용
+     - 최소/최대 크기 제한으로 사용성 보장 (가로 400px~95vw, 세로 300px~95vh)
+   - 페이지 전체 덮기 모달로 독립적인 렌더링 환경 구현
+     - fixed inset-0 z-[9999]로 전체 화면 덮기
+     - flex items-center justify-center로 모달 중앙 배치
+     - bg-black/80 backdrop-blur-sm으로 배경 블러 효과
+   - TTS 관련 모든 파일 및 로직 완전 제거
+     - ttsStore.ts, ttsUtils.ts, browserTestUtils.ts 등 TTS 관련 파일 삭제
+     - TTSCompatibilityTest, TTSControls, TTSPerformanceMonitor 등 컴포넌트 제거
+     - 메모리 사용량 최적화 및 에러 발생 방지
+   - 모달 상단 컨트롤 최적화
+     - 전체화면 토글 버튼 제거로 UI 단순화
+     - 종료 X 버튼만 유지하여 깔끔한 인터페이스 구현
+     - 전체화면 모드에서 플로팅 컨트롤 유지
+   - 성경읽기 페이지 레이아웃 복원 및 개선
+     - 네비게이션 바 및 스티키 헤더 복원
+     - 일관된 페이지 디자인 적용 (HOME, DATA 페이지와 동일한 구조)
+     - ScrollToTopButton 기능 유지
+
 ### 2025-07-19
 
 4. **기능: 책명별 테이블 리스트 페이지네이션 기능 구현** (0df808e)

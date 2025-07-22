@@ -389,7 +389,7 @@
                     <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-2 rounded-xl group-hover:scale-105 transition-transform">
                       <Book className="w-6 h-6 text-white" />
                     </div>
-                    <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent group-hover:underline">
+                    <h1 className="hidden md:block text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent group-hover:underline">
                       Bible Room Study
                     </h1>
                   </Link>
@@ -455,7 +455,7 @@
                   <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-2 rounded-xl group-hover:scale-105 transition-transform">
                     <Book className="w-6 h-6 text-white" />
                   </div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent group-hover:underline">
+                  <h1 className="hidden md:block text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent group-hover:underline">
                     Bible Room Study
                   </h1>
                 </Link>
@@ -513,7 +513,7 @@
                 <div>
                   <div className="flex items-center text-lg font-semibold text-slate-200 mb-2">
                     <ArrowUpCircle className="w-5 h-5 mr-1 text-blue-400" />
-                    데이터/카테고리 데이터 [내보내기]
+                    내보내기
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <ExportDataButton onExport={handleExportDataModal} loading={false} />
@@ -524,7 +524,7 @@
                 <div>
                   <div className="flex items-center text-lg font-semibold text-slate-200 mb-2">
                     <ArrowDownCircle className="w-5 h-5 mr-1 text-green-400" />
-                    데이터/카테고리 데이터 [가져오기]
+                    가져오기
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <ImportDataButton onImport={handleImportData} loading={importingData} />
@@ -573,19 +573,23 @@
         {/* 푸터 */}
         <footer className="mt-16 border-t border-slate-700/50 py-8">
           <div className="max-w-6xl mx-auto px-6 text-center">
-            <div className="flex items-center justify-center space-x-2 text-slate-400">
-              <Globe className="w-4 h-4" />
-              <span>Your Personal Bible Room Study, Built with</span>
-              <Heart className="w-4 h-4 text-red-400 fill-current" />
-              <span>by 나종춘</span>
-              <span>|</span>
-              <a 
-                href="mailto:najongchoon@gmail.com" 
-                className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors"
-              >
-                <Mail className="w-4 h-4" />
-                <span>najongchoon@gmail.com</span>
-              </a>
+            <div className="flex flex-col md:flex-row items-center justify-center space-y-2 md:space-y-0 md:space-x-2 text-slate-400 text-xs md:text-sm">
+              <div className="flex items-center space-x-2">
+                <Globe className="w-3 h-3 md:w-4 md:h-4" />
+                <span>Your Personal Bible Room Study, Built with</span>
+                <Heart className="w-3 h-3 md:w-4 md:h-4 text-red-400 fill-current" />
+                <span>by 나종춘</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="hidden md:inline">|</span>
+                <a 
+                  href="mailto:najongchoon@gmail.com" 
+                  className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  <Mail className="w-3 h-3 md:w-4 md:h-4" />
+                  <span>najongchoon@gmail.com</span>
+                </a>
+              </div>
             </div>
           </div>
         </footer>

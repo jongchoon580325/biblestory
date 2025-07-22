@@ -120,7 +120,7 @@ export default function Home() {
                 <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-2 rounded-xl group-hover:scale-105 transition-transform">
                   <Book className="w-6 h-6 text-white" />
                 </div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent group-hover:underline">
+                <h1 className="hidden md:block text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent group-hover:underline">
                   Bible Room Study
                 </h1>
               </Link>
@@ -193,7 +193,7 @@ export default function Home() {
               </div>
               
               {/* 탭별 통계 카드 */}
-              <div className="grid grid-cols-2 gap-6 mb-8">
+              <div className="hidden md:grid grid-cols-2 gap-6 mb-8">
                 <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/20">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
@@ -250,11 +250,11 @@ export default function Home() {
                         <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-3 rounded-lg mx-auto w-fit mb-3 group-hover:scale-110 transition-transform duration-300">
                           <Bookmark className="w-6 h-6 text-blue-400 group-hover:text-white transition-colors" />
                         </div>
-                        <h3 className="font-bold text-white group-hover:text-blue-400 transition-colors text-lg mb-2">
+                        <h3 className="font-bold text-white group-hover:text-blue-400 transition-colors text-sm md:text-lg mb-2">
                           {book.name}
                         </h3>
                         {/* 자료 개수 표시 */}
-                        <div className="inline-flex items-center justify-center px-2 py-1 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg">
+                        <div className="hidden md:inline-flex items-center justify-center px-2 py-1 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg">
                           <span className="text-green-400 text-sm font-medium">
                             자료수 {book.count} 개
                           </span>
@@ -281,19 +281,23 @@ export default function Home() {
       {/* 푸터 */}
       <footer className="mt-16 border-t border-slate-700/50 py-8">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <div className="flex items-center justify-center space-x-2 text-slate-400">
-            <Globe className="w-4 h-4" />
-            <span>Your Personal Bible Room Study, Built with</span>
-            <Heart className="w-4 h-4 text-red-400 fill-current" />
-            <span>by 나종춘</span>
-            <span>|</span>
-            <a 
-              href="mailto:najongchoon@gmail.com" 
-              className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors"
-            >
-              <Mail className="w-4 h-4" />
-              <span>najongchoon@gmail.com</span>
-            </a>
+          <div className="flex flex-col md:flex-row items-center justify-center space-y-2 md:space-y-0 md:space-x-2 text-slate-400 text-xs md:text-sm">
+            <div className="flex items-center space-x-2">
+              <Globe className="w-3 h-3 md:w-4 md:h-4" />
+              <span>Your Personal Bible Room Study, Built with</span>
+              <Heart className="w-3 h-3 md:w-4 md:h-4 text-red-400 fill-current" />
+              <span>by 나종춘</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="hidden md:inline">|</span>
+              <a 
+                href="mailto:najongchoon@gmail.com" 
+                className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                <Mail className="w-3 h-3 md:w-4 md:h-4" />
+                <span>najongchoon@gmail.com</span>
+              </a>
+            </div>
           </div>
         </div>
       </footer>

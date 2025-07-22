@@ -46,7 +46,7 @@ export default function ReadPage() {
                 <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-2 rounded-xl group-hover:scale-105 transition-transform">
                   <Book className="w-6 h-6 text-white" />
                 </div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent group-hover:underline">
+                <h1 className="hidden md:block text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent group-hover:underline">
                   Bible Room Study
                 </h1>
               </Link>
@@ -75,9 +75,11 @@ export default function ReadPage() {
           </div>
 
           {/* 성경읽기 레이아웃 */}
-          <div className="flex gap-6 min-h-0" style={{ height: 'calc(100vh - 280px)' }}>
+          <div className="flex flex-col lg:flex-row gap-6 lg:h-[calc(100vh-280px)]">
             {/* 왼쪽 사이드바 - 성경선택 */}
-            <SidebarContainer />
+            <div className="w-full lg:w-[400px] flex-shrink-0">
+              <SidebarContainer />
+            </div>
 
             {/* 오른쪽 읽기 영역 */}
             <div className="flex-1 min-w-0 bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 overflow-hidden flex flex-col">
@@ -97,19 +99,23 @@ export default function ReadPage() {
       {/* 푸터 */}
       <footer className="mt-16 border-t border-slate-700/50 py-8">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <div className="flex items-center justify-center space-x-2 text-slate-400">
-            <Globe className="w-4 h-4" />
-            <span>Your Personal Bible Room Study, Built with</span>
-            <Heart className="w-4 h-4 text-red-400 fill-current" />
-            <span>by 나종춘</span>
-            <span>|</span>
-            <a 
-              href="mailto:najongchoon@gmail.com" 
-              className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors"
-            >
-              <Mail className="w-4 h-4" />
-              <span>najongchoon@gmail.com</span>
-            </a>
+          <div className="flex flex-col md:flex-row items-center justify-center space-y-2 md:space-y-0 md:space-x-2 text-slate-400 text-xs md:text-sm">
+            <div className="flex items-center space-x-2">
+              <Globe className="w-3 h-3 md:w-4 md:h-4" />
+              <span>Your Personal Bible Room Study, Built with</span>
+              <Heart className="w-3 h-3 md:w-4 md:h-4 text-red-400 fill-current" />
+              <span>by 나종춘</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="hidden md:inline">|</span>
+              <a 
+                href="mailto:najongchoon@gmail.com" 
+                className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                <Mail className="w-3 h-3 md:w-4 md:h-4" />
+                <span>najongchoon@gmail.com</span>
+              </a>
+            </div>
           </div>
         </div>
       </footer>

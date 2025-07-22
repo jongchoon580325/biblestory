@@ -141,28 +141,44 @@ export default function BookTablePage() {
         </div>
         {/* 테이블 리스트 */}
         <div className="overflow-x-auto rounded-xl border border-slate-700 bg-slate-800/50">
-          <table className="min-w-full text-sm text-slate-300">
+          <table className="min-w-full text-xs text-slate-300">
             <thead>
               <tr className="bg-slate-900/80">
-                <th className="px-4 py-3 text-left">책명</th>
-                <th className="px-4 py-3 text-left">장</th>
-                <th className="px-4 py-3 text-left">파일명</th>
-                <th className="px-4 py-3 text-center">파일보기</th>
-                <th className="px-4 py-3 text-center">다운로드</th>
-                <th className="px-4 py-3 text-center">관리</th>
+                <th className="px-4 py-3 text-left max-w-xs">
+                  <div className="truncate" title="책명">책명</div>
+                </th>
+                <th className="px-4 py-3 text-left max-w-xs">
+                  <div className="truncate" title="장">장</div>
+                </th>
+                <th className="px-4 py-3 text-left max-w-xs">
+                  <div className="truncate" title="파일명">파일명</div>
+                </th>
+                <th className="px-4 py-3 text-center max-w-xs">
+                  <div className="truncate" title="파일보기">파일보기</div>
+                </th>
+                <th className="px-4 py-3 text-center max-w-xs">
+                  <div className="truncate" title="다운로드">다운로드</div>
+                </th>
+                <th className="hidden md:table-cell px-4 py-3 text-center max-w-xs">
+                  <div className="truncate" title="관리">관리</div>
+                </th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} className="text-center py-8 text-slate-400">로딩 중...</td></tr>
+                <tr><td colSpan={5} className="text-center py-8 text-slate-400">로딩 중...</td></tr>
               ) : error ? (
-                <tr><td colSpan={6} className="text-center py-8 text-red-500">{error}</td></tr>
+                <tr><td colSpan={5} className="text-center py-8 text-red-500">{error}</td></tr>
               ) : data.length === 0 ? (
-                <tr><td colSpan={6} className="text-center py-8 text-slate-400">데이터가 없습니다.</td></tr>
+                <tr><td colSpan={5} className="text-center py-8 text-slate-400">데이터가 없습니다.</td></tr>
               ) : currentData.map((row) => (
                 <tr key={row.id} className="border-t border-slate-700 hover:bg-slate-700/20">
                   {/* 책명: 라우트 파라미터 사용 */}
-                  <td className="px-4 py-2 font-semibold">{bookName}</td>
+                  <td className="px-4 py-2 font-semibold max-w-xs">
+                    <div className="truncate" title={bookName}>
+                      {bookName}
+                    </div>
+                  </td>
                   {/* 장 */}
                   <td className="px-4 py-2">
                     {editId === row.id ? (
@@ -179,7 +195,7 @@ export default function BookTablePage() {
                     )}
                   </td>
                   {/* 파일명 */}
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2 max-w-xs">
                     {editId === row.id ? (
                       <input
                         className="w-32 px-2 py-1 rounded border border-slate-400"
@@ -188,7 +204,9 @@ export default function BookTablePage() {
                         onChange={e => setEditRow({ ...editRow!, file_name: e.target.value })}
                       />
                     ) : (
-                      row.file_name
+                      <div className="truncate" title={row.file_name}>
+                        {row.file_name}
+                      </div>
                     )}
                   </td>
                   {/* 파일보기 */}
@@ -216,7 +234,7 @@ export default function BookTablePage() {
                       }}
                       title="파일보기"
                     >
-                      <Eye className="inline w-5 h-5" />
+                      <Eye className="inline w-3 h-3 md:w-5 md:h-5" />
                     </button>
                   </td>
                   {/* 다운로드 */}
@@ -229,11 +247,11 @@ export default function BookTablePage() {
                       }}
                       title="다운로드"
                     >
-                      <Download className="inline w-5 h-5" />
+                      <Download className="inline w-3 h-3 md:w-5 md:h-5" />
                     </button>
                   </td>
                   {/* 관리(수정/삭제) */}
-                  <td className="px-4 py-2 text-center space-x-2">
+                  <td className="hidden md:table-cell px-4 py-2 text-center space-x-2">
                     {editId === row.id ? (
                       <>
                         <button
@@ -269,7 +287,7 @@ export default function BookTablePage() {
                           }}
                           title="저장"
                         >
-                          <Check className="inline w-5 h-5" />
+                          <Check className="inline w-3 h-3 md:w-5 md:h-5" />
                         </button>
                         <button
                           className="text-red-400 hover:text-red-600"
@@ -279,7 +297,7 @@ export default function BookTablePage() {
                           }}
                           title="취소"
                         >
-                          <XIcon className="inline w-5 h-5" />
+                          <XIcon className="inline w-3 h-3 md:w-5 md:h-5" />
                         </button>
                       </>
                     ) : (
@@ -292,14 +310,14 @@ export default function BookTablePage() {
                           }}
                           title="수정"
                         >
-                          <Edit className="inline w-5 h-5" />
+                          <Edit className="inline w-3 h-3 md:w-5 md:h-5" />
                         </button>
                         <button
                           className="text-red-400 hover:text-red-200"
                           onClick={() => setDeleteId(row.id)}
                           title="삭제"
                         >
-                          <Trash2 className="inline w-5 h-5" />
+                          <Trash2 className="inline w-3 h-3 md:w-5 md:h-5" />
                         </button>
                       </>
                     )}
@@ -310,22 +328,22 @@ export default function BookTablePage() {
           </table>
         </div>
         {/* 페이지네이션/항목보기 */}
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex flex-col md:flex-row items-center justify-between mt-6 space-y-2 md:space-y-0">
           {/* 전체 데이터 수 표시 */}
-          <div className="text-slate-400 text-sm">
+          <div className="text-slate-400 text-xs md:text-sm">
             총 {data.length}개 항목 중 {startIndex + 1}-{Math.min(endIndex, data.length)}개 표시
           </div>
           
           {/* 페이지네이션 컨트롤 */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             {/* 페이지 번호 네비게이션 */}
             {totalPages > 1 && (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1 md:space-x-2">
                 {/* 이전 페이지 버튼 */}
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                  className={`px-2 py-1 md:px-3 md:py-1 rounded text-xs md:text-sm font-medium transition-colors ${
                     currentPage === 1
                       ? 'text-slate-500 cursor-not-allowed'
                       : 'text-slate-400 hover:text-white hover:bg-slate-700'
@@ -339,7 +357,7 @@ export default function BookTablePage() {
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                    className={`px-2 py-1 md:px-3 md:py-1 rounded text-xs md:text-sm font-medium transition-colors ${
                       currentPage === page
                         ? 'bg-blue-500 text-white'
                         : 'text-slate-400 hover:text-white hover:bg-slate-700'
@@ -353,7 +371,7 @@ export default function BookTablePage() {
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                  className={`px-2 py-1 md:px-3 md:py-1 rounded text-xs md:text-sm font-medium transition-colors ${
                     currentPage === totalPages
                       ? 'text-slate-500 cursor-not-allowed'
                       : 'text-slate-400 hover:text-white hover:bg-slate-700'
@@ -365,12 +383,12 @@ export default function BookTablePage() {
             )}
             
             {/* 항목보기 선택 */}
-            <div className="flex items-center space-x-2">
-              <span className="text-slate-400 text-sm">항목보기:</span>
+            <div className="flex items-center space-x-1 md:space-x-2">
+              <span className="text-slate-400 text-xs md:text-sm">항목보기:</span>
               <select 
                 value={itemsPerPage}
                 onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
-                className="bg-slate-800 text-white border border-slate-700 rounded px-2 py-1 text-sm"
+                className="bg-slate-800 text-white border border-slate-700 rounded px-1 py-1 md:px-2 md:py-1 text-xs md:text-sm"
               >
                 <option value={10}>10개</option>
                 <option value={20}>20개</option>
