@@ -487,7 +487,7 @@
               <div className="flex-[0_0_50%] basis-1/2 flex flex-col space-y-6 min-w-0">
                 <div className="flex items-center text-xl font-bold text-white mb-2">
                   <Book className="w-6 h-6 mr-2 text-blue-400" />
-                  성경자료 등록
+                  성경요약 HTML 자료 등록
                 </div>
                 <FileUpload />
                 <div className="flex items-center text-xl font-bold text-white mb-2">
@@ -499,7 +499,7 @@
                 {/* 성경읽기 자료 등록 */}
                 <div className="flex items-center text-xl font-bold text-white mb-2">
                   <BookOpen className="w-6 h-6 mr-2 text-purple-400" />
-                  성경읽기 자료 등록
+                  성경읽기 HTML 자료 등록
                 </div>
                 <BibleReadingUpload />
               </div>

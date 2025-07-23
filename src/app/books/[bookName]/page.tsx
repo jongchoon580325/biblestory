@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Eye, Download, Edit, Trash2, Search, ChevronLeft, Check, X as XIcon, ArrowUp } from "lucide-react";
+import { Eye, Download, Edit, Trash2, Search, ChevronLeft, Check, X as XIcon, ArrowUp, Lock } from "lucide-react";
 import { useParams } from "next/navigation";
 import HtmlPreviewModal from "@/components/features/HtmlPreviewModal";
 import { supabase } from "@/utils/supabaseClient";
@@ -42,6 +42,17 @@ export default function BookTablePage() {
   // 페이지네이션 상태 추가
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  // 비밀번호 인증 상태
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [currentPassword] = useState('1111'); // DATA 페이지와 동일한 비밀번호
+  const [pendingAction, setPendingAction] = useState<{
+    type: 'edit' | 'delete';
+    rowId: string;
+    rowData?: EditRowType;
+  } | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,6 +121,41 @@ export default function BookTablePage() {
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
     setItemsPerPage(newItemsPerPage);
     setCurrentPage(1); // 첫 페이지로 리셋
+  };
+
+  // 비밀번호 인증 처리
+  const handlePasswordAuth = () => {
+    if (password === currentPassword) {
+      setShowPasswordModal(false);
+      setPassword('');
+      setPasswordError('');
+      
+      // 인증 성공 시 대기 중인 작업 실행
+      if (pendingAction) {
+        if (pendingAction.type === 'edit') {
+          setEditId(pendingAction.rowId);
+          setEditRow(pendingAction.rowData!);
+        } else if (pendingAction.type === 'delete') {
+          setDeleteId(pendingAction.rowId);
+        }
+        setPendingAction(null);
+      }
+    } else {
+      setPasswordError('비밀번호가 올바르지 않습니다.');
+      setPassword('');
+    }
+  };
+
+  // 수정 버튼 클릭 핸들러
+  const handleEditClick = (rowId: string, rowData: EditRowType) => {
+    setPendingAction({ type: 'edit', rowId, rowData });
+    setShowPasswordModal(true);
+  };
+
+  // 삭제 버튼 클릭 핸들러
+  const handleDeleteClick = (rowId: string) => {
+    setPendingAction({ type: 'delete', rowId });
+    setShowPasswordModal(true);
   };
 
   return (
@@ -304,17 +350,14 @@ export default function BookTablePage() {
                       <>
                         <button
                           className="text-green-400 hover:text-green-200"
-                          onClick={() => {
-                            setEditId(row.id);
-                            setEditRow({ chapter: row.chapter, file_name: row.file_name });
-                          }}
+                          onClick={() => handleEditClick(row.id, { chapter: row.chapter, file_name: row.file_name })}
                           title="수정"
                         >
                           <Edit className="inline w-3 h-3 md:w-5 md:h-5" />
                         </button>
                         <button
                           className="text-red-400 hover:text-red-200"
-                          onClick={() => setDeleteId(row.id)}
+                          onClick={() => handleDeleteClick(row.id)}
                           title="삭제"
                         >
                           <Trash2 className="inline w-3 h-3 md:w-5 md:h-5" />
@@ -492,6 +535,49 @@ export default function BookTablePage() {
                   setDownloadFileName(null);
                 }}
               >취소</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 비밀번호 인증 모달 */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="bg-slate-900 p-8 rounded-2xl border border-slate-700 space-y-4 min-w-[320px]">
+            <div className="text-white text-lg font-bold mb-2 flex items-center gap-2">
+              <Lock className="w-6 h-6 text-blue-400" />
+              관리자 인증
+            </div>
+            <div className="text-slate-300 mb-4">
+              {pendingAction?.type === 'edit' ? '수정' : '삭제'} 작업을 수행하려면 관리자 비밀번호를 입력하세요.
+            </div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handlePasswordAuth()}
+              placeholder="비밀번호를 입력하세요"
+              className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            {passwordError && <div className="text-red-400 text-sm">{passwordError}</div>}
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 rounded-xl font-semibold bg-slate-700 text-white hover:bg-slate-600 transition"
+                onClick={() => {
+                  setShowPasswordModal(false);
+                  setPassword('');
+                  setPasswordError('');
+                  setPendingAction(null);
+                }}
+              >
+                취소
+              </button>
+              <button
+                className="px-4 py-2 rounded-xl font-semibold bg-blue-500 text-white hover:bg-blue-600 transition"
+                onClick={handlePasswordAuth}
+              >
+                인증
+              </button>
             </div>
           </div>
         </div>

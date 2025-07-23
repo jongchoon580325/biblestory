@@ -140,10 +140,10 @@ export default function Home() {
           <div className="sticky top-0 z-20 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50 -mx-6 px-6 py-4">
             <div className="text-center space-y-4">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-                Bible Room Study
+                말씀을 말씀으로 
               </h1>
               <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-                하나님의 말씀을 깊이 있게 공부하는 개인 성경 공부실입니다.
+                하나님의 말씀을 진리와 생명의 말씀으로 순종하는 그리스도인의 삶
               </p>
             </div>
           </div>
@@ -186,7 +186,7 @@ export default function Home() {
                           : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
                       }`}
                     >
-                      {tab} ({tab === '구약' ? totalOldTestament : totalNewTestament}권)
+                      {tab}
                     </button>
                   ))}
                 </div>
