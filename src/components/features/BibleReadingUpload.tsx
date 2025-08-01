@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Upload, FileText, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { supabase } from '@/utils/supabaseClient';
 import { getBookData } from '@/utils/bibleData';
@@ -26,6 +26,7 @@ export default function BibleReadingUpload() {
   const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadResults, setUploadResults] = useState<{ success: number; error: number }>({ success: 0, error: 0 });
+  const [autoResetTimer, setAutoResetTimer] = useState<NodeJS.Timeout | null>(null);
 
   // 파일명 검증 함수
   const validateFileName = (fileName: string): FileValidationResult => {
@@ -287,6 +288,11 @@ export default function BibleReadingUpload() {
 
     setUploadResults({ success: successCount, error: errorCount });
     setIsUploading(false);
+    
+    // 업로드 완료 후 3초 타이머 시작
+    if (successCount > 0 || errorCount > 0) {
+      startAutoResetTimer();
+    }
   };
 
   // 파일 목록 초기화
@@ -294,7 +300,37 @@ export default function BibleReadingUpload() {
     setFiles([]);
     setUploadProgress([]);
     setUploadResults({ success: 0, error: 0 });
+    // 파일 입력 필드 초기화
+    const fileInput = document.getElementById('file-input') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   };
+
+  // 자동 초기화 타이머 설정
+  const startAutoResetTimer = () => {
+    // 기존 타이머가 있다면 제거
+    if (autoResetTimer) {
+      clearTimeout(autoResetTimer);
+    }
+    
+    // 3초 후 자동 초기화
+    const timer = setTimeout(() => {
+      clearFiles();
+      setAutoResetTimer(null);
+    }, 3000);
+    
+    setAutoResetTimer(timer);
+  };
+
+  // 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (autoResetTimer) {
+        clearTimeout(autoResetTimer);
+      }
+    };
+  }, [autoResetTimer]);
 
   return (
     <div className="space-y-4 p-6 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700/50">
@@ -457,6 +493,12 @@ export default function BibleReadingUpload() {
                 <div className="flex items-center text-red-400 text-sm">
                   <XCircle className="w-4 h-4 mr-1" />
                   실패: {uploadResults.error}개 파일
+                </div>
+              )}
+              {autoResetTimer && (
+                <div className="flex items-center text-blue-400 text-sm">
+                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-400 mr-1"></div>
+                  3초 후 자동 초기화
                 </div>
               )}
             </div>
